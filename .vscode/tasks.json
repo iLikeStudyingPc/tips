@@ -18,7 +18,10 @@
 			"problemMatcher": [
 				"$gcc"
 			],
-			"group": "build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
 			"detail": "编译器: /usr/bin/gcc"
 		},
 		{
@@ -38,11 +41,28 @@
 			"problemMatcher": [
 				"$gcc"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"detail": "编译器: C:\\MinGW\\mingw64\\bin\\gcc.exe"
+		},
+		{
+			"type": "cppbuild",
+			"label": "C小型单文件test",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"${file}",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "编译器: /usr/bin/gcc"
 		}
 	]
 }

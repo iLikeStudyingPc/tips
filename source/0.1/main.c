@@ -1,12 +1,21 @@
 #include "function.h"
-int main(int argc,char **argv){
-  if(thesystem==ERROR){
-    wprintf("未知的系统,暂无适配");
-    return EXIT_FAILURE;
+int main(int argc, char** argv) {
+  set_language(chinese);
+  wprintf(L"可以打印字符%s\n",workdirname.name[8]);
+  wchar_t str[50] = L"";
+  for (int i = 1; i < argc; i++) {
+    /*将多字符转化为宽字符*/
+    {
+      *argv++;
+      mbstowcs(str,*argv, sizeof(str));
+    }
+    if(regular_name(str)){
+      wprintf(L"合法");
+    }else{
+      wprintf(L"非法");
+    }
+    wprintf(L"%d:%ls\n",i,str);
   }
-  char test[100]="test";
-  printf("hello world\n");
-  printf("%s\n",Initialize());
-  printf("%s\n",workdirname.name[9]);
   return EXIT_SUCCESS;
 }
+

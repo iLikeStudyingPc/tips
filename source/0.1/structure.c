@@ -11,6 +11,8 @@ struct tipcontent{
   wchar_t name[51];
   /*tag创建时间*/
   time_t create_time;
+  /*配置语言支持(插入与显示时候安装语言支持显示，如果插入不配置语言选项则按照默认语言选项进行)*/
+  int language;
 };
 // 定义散列表节点
 struct hash_node {
