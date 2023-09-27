@@ -1,7 +1,13 @@
 #include "function.h"
 /*代表着工作保存路径*/
-extern Workdirname2023927 workdirname;
+Workdirname2023927 workdirname;
+/*访问文件仓库*/
 static void return_fileplace(void) {
+  if(thesystem==ERROR){
+    printf("系统不被支持\n");
+    sleep(3);
+    exit(EXIT_FAILURE);
+  }
 #ifdef __linux__
   // Linux平台获取公用目录路径
   char *xdg_public = getenv("XDG_PUBLICSHARE_DIR");
@@ -25,9 +31,9 @@ static void return_fileplace(void) {
   }
 #endif
 }
-extern char* start(void){
-  if(workdirname.name[0][0]='\0'){
-    
+extern char* Initialize(void){
+  if(workdirname.name[0][0]=='\0'){
+    return_fileplace();
   };
-  return;
+  return workdirname.name[0];
 }
