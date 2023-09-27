@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "C默认生成",
+			"label": "C默认生成linux",
 			"command": "/usr/bin/gcc",
 			"args": [
 				"-fdiagnostics-color=always",
@@ -18,11 +18,31 @@
 			"problemMatcher": [
 				"$gcc"
 			],
+			"group": "build",
+			"detail": "编译器: /usr/bin/gcc"
+		},
+		{
+			"type": "cppbuild",
+			"label": "C默认生成Windows",
+			"command": "C:\\MinGW\\mingw64\\bin\\gcc.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"*.c",
+				"-o",
+				"${workspaceFolder}/software/debug/tips.exe"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
-			"detail": "编译器: /usr/bin/gcc"
+			"detail": "编译器: C:\\MinGW\\mingw64\\bin\\gcc.exe"
 		}
 	]
 }

@@ -4,6 +4,8 @@
 #include "string.h"
 #include "unistd.h"
 #include "ctype.h"
+#include "wchar.h"
+#include "locale.h"
 enum _system{WINDOWS=10,LINUX,ERROR=255};
 
 /*代表着工作保存路径*/
