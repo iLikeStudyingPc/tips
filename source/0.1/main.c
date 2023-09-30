@@ -1,6 +1,8 @@
 #include "function.h"
+#include "save.h"
 int main(int argc, char** argv) {
-  set_language(chinese);
+  Initialize();
+  set_language(chinese_CN);
   wprintf(L"可以打印字符%s\n",workdirname.name[8]);
   wchar_t str[50] = L"";
   for (int i = 1; i < argc; i++) {
