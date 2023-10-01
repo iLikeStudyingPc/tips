@@ -1,4 +1,5 @@
 #include "function.h"
+#include <stdlib.h>
 /*代表着工作保存路径*/
 Workdirname2023927 workdirname;
 /*一个tip内容*/

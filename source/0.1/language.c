@@ -1,6 +1,6 @@
 #include <locale.h>
 #include "function.h"
-
+struct LANGUNAGE_SUPPORT language_pack;
 static void language_group_set(int select);
 /*设置语言支持*/
 void set_language(int select){

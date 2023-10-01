@@ -1,5 +1,8 @@
 #include "function.h"
 #include "save.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 static int make_the_dir(char *string);
 /*返回存档树的位置*/
 static void return_fileplace(void) {
@@ -34,7 +37,7 @@ extern char* Initialize(void) {
   return_fileplace();
   char *workspace=malloc(100*sizeof(char));
   *(workspace+0)='\0';
-  strcat(strcpy(workspace,workdirname.name[0]),"path.data");
+  strcat(strcpy(workspace,workdirname.name[0]),"setting.data");
   FILE *thespace=fopen(workspace,"r+");
   if(thespace==NULL){
     workdirname.language=english_US;/*默认语言设置为英文*/
@@ -47,9 +50,10 @@ extern char* Initialize(void) {
     /*
     **创建初始化存档目录
     */
-    strcat(strcpy(workspace,workdirname.name[0]),"path.data");
+    strcat(strcpy(workspace,workdirname.name[0]),"setting.data");
     thespace=fopen(workspace,"w");
-    strcpy(workdirname.name[9],"version 1.0");
+    /*告知软件版本*/
+    strcpy(workdirname.name[9],VERSION);
     fwrite(&workdirname,sizeof(Workdirname2023927),1,thespace);
   }else{
     fread(&workdirname,sizeof(Workdirname2023927),1,thespace);
@@ -88,4 +92,16 @@ static int make_the_dir(char *string){
   }
   #endif
   return 1;
+}
+void save_optons(void){
+  char str[100];
+  sprintf(str,"%s%s",workdirname.name[0],"setting.data");
+  FILE *savefile=fopen(str,"w");
+  if(savefile!=NULL){
+    fwrite(&workdirname,sizeof(Workdirname2023927),1,savefile);
+    fclose(savefile);
+  }else{
+    exit(EXIT_FAILURE);
+  }
+  return;
 }
