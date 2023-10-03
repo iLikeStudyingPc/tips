@@ -1,11 +1,12 @@
 #include <wchar.h>
-#define VERSION 0.1
+#define VERSION 0.0001
 enum _system { WINDOWS = 10, LINUX, ERROR = 255 };
 /*代表着工作保存路径*/
 typedef struct Workdirname2023 {
   /*
   !workdirname.name[0]:公共路径,公共路径里包含文件setting.data，存储其他软件的存档路径
   !workdirname.name[1]:软件tips基本结构体存档路径
+  !workdirname.name[2]:文本编辑软件的存档路径
   */
   char name[10][100];
   /*设置的语言*/
