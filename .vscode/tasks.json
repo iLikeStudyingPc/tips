@@ -23,6 +23,26 @@
 				"isDefault": true
 			},
 			"detail": "编译器: /usr/bin/gcc"
+		},{
+			"type": "cppbuild",
+			"label": "C优化生成linux",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"-O3",
+				"*.c",
+				"-o",
+				"${workspaceFolder}/software/debug/mytips"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group":"build",
+			"detail": "编译器: /usr/bin/gcc"
 		},
 		{
 			"type": "cppbuild",

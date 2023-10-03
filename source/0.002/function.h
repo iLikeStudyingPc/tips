@@ -1,5 +1,5 @@
 #include <wchar.h>
-#define VERSION 0.0001
+#define VERSION 0.002
 enum _system { WINDOWS = 10, LINUX, ERROR = 255 };
 /*代表着工作保存路径*/
 typedef struct Workdirname2023 {
@@ -79,6 +79,17 @@ struct LANGUNAGE_SUPPORT {
   wchar_t Help[2000];                 // 帮助文件
   wchar_t counld_not_find_command[200];//无当前命令参数，请使用"mytips -help"命令查看帮助文件
   wchar_t do_you_want_remove_note[80];//删除这个笔记吗?
+  wchar_t Version_update_operation_in_progress[80];//正在进行版本更新操作
+  wchar_t Complete_the_deletion_operation[100];//完成删除操作
+  wchar_t Entry_not_found[70];//找不到条目
+  wchar_t Archive_failed[70];//存档失败
+  wchar_t Found_Entry[70];//找到条目
+  wchar_t Modifying_Note_Entries[70];//修改笔记条目
+  wchar_t complete[50];//完成
+  wchar_t Empty_text_error[80];//空文本错误
+  wchar_t add_note[80];//添加笔记条目
+  wchar_t Entry_already_exists[80];//条目已存在
+  //修改条目
 }; /*结构体请由末尾加入新文本，进行顺序的设置*/
 extern struct LANGUNAGE_SUPPORT language_pack;
 

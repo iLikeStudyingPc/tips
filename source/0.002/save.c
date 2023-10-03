@@ -32,7 +32,7 @@ static void return_fileplace(void) {
   if(!make_the_dir(workdirname.name[0])) exit(EXIT_FAILURE);
 #endif
 }
-/*软件开启准备活动,告诉软件存档位置，但是并不会读取这些存档*/
+/*软件开启准备活动,告诉软件存档位置，但是并不会读取这些存档,首次初始化返回NULL*/
 extern char* Initialize(void) {
   return_fileplace();
   char *workspace=malloc(100*sizeof(char));
@@ -62,9 +62,12 @@ extern char* Initialize(void) {
     if(thespace!=NULL){
       fread(&workdirname,sizeof(Workdirname2023927),1,thespace);
     }else{
-      wprintf(L"无法在此电脑完成初始化\n");
+      wprintf(L"Unable to complete initialization on this computer\n");
       exit(EXIT_FAILURE);
     }
+    free(workspace);
+    fclose(thespace);
+    return NULL;
   }else{
     fread(&workdirname,sizeof(Workdirname2023927),1,thespace);
   }

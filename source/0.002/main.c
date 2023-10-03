@@ -32,9 +32,17 @@ void exitnow(void) {
 主程序
 */
 int main(int argc, char **argv) {
-  Initialize();
+  if(Initialize()==NULL){
+    char p[strlen(*argv)+16];
+    Language_setting_interaction();
+    return(EXIT_SUCCESS);
+  };
   make_the_dir(workdirname.name[2]);
   set_language(workdirname.language);
+  if(workdirname.version<VERSION){
+    wprintf(L"%ls\n",language_pack.Version_update_operation_in_progress);
+    workdirname.version=VERSION;
+  }
   if (thesystem == WINDOWS) {
     system("chcp 65001&&cls");
   }
@@ -99,7 +107,7 @@ int main(int argc, char **argv) {
     }
   }
   if (thisopen.version == 1) {
-    wprintf(L"%ls %.4f\n", language_pack.Version, workdirname.version);
+    wprintf(L"%ls %.3f\n", language_pack.Version, workdirname.version);
   } else if (thisopen.help == 1) {
     wprintf(L"%ls\n", language_pack.Help);
   } else if (thisopen.rf == 1) { /*删除笔记*/
@@ -108,13 +116,13 @@ int main(int argc, char **argv) {
       mbstowcs(str, p->str,sizeof(str));
       int ch=tree_remove_node(noderoot,str);
       switch(ch){
-        case 1:wprintf(L"已删除:%s\n", p->str);break;
-        case 0:wprintf(L"找不到笔记:%s\n",p->str);break;
+        case 1:wprintf(L"%ls:%s\n",language_pack.Complete_the_deletion_operation,p->str);break;
+        case 0:wprintf(L"%ls:%s\n",language_pack.Entry_not_found,p->str);break;
       }
       /*add(p->str)*/
     }
     if(!write_root_end(noderoot,workdirname.name[1])){
-      wprintf(L"存档失败\n");
+      wprintf(L"%ls\n",language_pack.Archive_failed);
     }
   } else if (thisopen.rm == 1) { /*询问是否删除笔记*/
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
@@ -151,7 +159,7 @@ int main(int argc, char **argv) {
       mbstowcs(str, p->str,sizeof(str));
       struct tree *thistree=treesearch(noderoot,str);
       if(thistree!=NULL&&thistree->tip!=NULL){
-        wprintf(L"找到笔记:%ls\n", str);
+        wprintf(L"%ls:%ls\n",language_pack.Found_Entry,str);
         int a=workdirname.language;
         if(a!=thistree->tip->language){
           set_language(thistree->tip->language);
@@ -163,42 +171,42 @@ int main(int argc, char **argv) {
           fflush(stdout);
         }
       }else{
-        wprintf(L"找不到笔记:%ls\n", str);
+        wprintf(L"%ls:%ls\n",language_pack.Entry_not_found,str);
       }
     }
   } else if (thisopen.change == 1) { /*修改笔记，如果笔记不存在则添加笔记*/
-    wprintf(L"修改笔记条目%d:\n", count_str);
+    wprintf(L"%ls %d:\n",language_pack.Modifying_Note_Entries,count_str);
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
       wchar_t str[worknamemax];
       mbstowcs(str, p->str, sizeof(str));
       int ch=treechange(noderoot,str);
       if(ch==1){
-        wprintf(L"修改笔记成功:%ls\n",str);
+        wprintf(L"%ls:%ls\n",language_pack.complete,str);
       }else if(ch==0){
-        wprintf(L"笔记不存在%ls\n",str);
+        wprintf(L"%ls:%ls\n",language_pack.Entry_not_found,str);
       }else if(ch==-1){
-        wprintf(L"修改笔记失败,文本为空:%ls\n",str);
+        wprintf(L"%ls:%ls\n",language_pack.Empty_text_error,str);
       }
       
       /*add(p->str)*/
     }
   } else if (thisopen.add == 1) { /*添加笔记*/
-    wprintf(L"添加笔记条目%d:\n", count_str);
+    wprintf(L"%ls:%d:\n",language_pack.add_note,count_str);
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
       wchar_t str[worknamemax];
       mbstowcs(str, p->str, sizeof(str));
       int ch=treeadd(noderoot,str);
       if(ch==1){
-        wprintf(L"添加笔记%ls成功\n",str);
+        wprintf(L"%ls:%ls\n",language_pack.complete,str);
       }else if(ch==0){
-        wprintf(L"检查是否笔记%ls已存在，添加失败\n",str);
+        wprintf(L"%ls:%ls\n",language_pack.Entry_already_exists,str);
       }else if(ch==-1){
-        wprintf(L"添加失败,因为编辑文本不存在\n",str);
+        wprintf(L"%ls:%ls\n",language_pack.Empty_text_error,str);
       }
       /*add(p->str)*/
     }
     if(!write_root_end(noderoot,workdirname.name[1])){
-      wprintf(L"存档失败\n");
+      wprintf(L"%ls\n",language_pack.Archive_failed);
     }
   } else if (thisopen.restore == 1) { /*备份*/
     ;
