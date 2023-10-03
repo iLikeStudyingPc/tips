@@ -4,6 +4,7 @@
     "typeinfo": "c",
     "string.h": "c",
     "function.h": "c",
-    "save.h": "c"
+    "save.h": "c",
+    "structure.h": "c"
   }
 }

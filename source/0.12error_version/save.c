@@ -3,9 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-static int make_the_dir(char *string);
-/*返回存档树的位置*/
 
+/*返回存档树的位置*/
 static void return_fileplace(void) {
 #ifdef __WIN32
   TCHAR docPath[MAX_PATH];
@@ -39,7 +38,7 @@ extern char* Initialize(void) {
   char *workspace=malloc(100*sizeof(char));
   *(workspace+0)='\0';
   strcat(strcpy(workspace,workdirname.name[0]),"setting.data");
-  FILE *thespace=fopen(workspace,"r+");
+  FILE *thespace=fopen(workspace,"r");
   if(thespace==NULL){
     workdirname.language=english_US;/*默认语言设置为英文*/
     {
@@ -47,6 +46,7 @@ extern char* Initialize(void) {
       **告知软件tips基本结构体等存档路径,但文件并不被创建
       */
       strcat(strcpy(workdirname.name[1],workdirname.name[0]),"mytips.data");
+      strcat(strcpy(workdirname.name[2],workdirname.name[0]),"txt_dir/");
     }
     /*
     **创建初始化存档目录
@@ -57,6 +57,14 @@ extern char* Initialize(void) {
     workdirname.version=VERSION;
     workdirname.default_control=0;
     fwrite(&workdirname,sizeof(Workdirname2023927),1,thespace);
+    fclose(thespace);
+    thespace=fopen(workspace,"r");
+    if(thespace!=NULL){
+      fread(&workdirname,sizeof(Workdirname2023927),1,thespace);
+    }else{
+      wprintf(L"无法在此电脑完成初始化\n");
+      exit(EXIT_FAILURE);
+    }
   }else{
     fread(&workdirname,sizeof(Workdirname2023927),1,thespace);
   }
@@ -84,7 +92,7 @@ FILE *write_file(char *filename){
 }
 
 /*创建文件夹，当文件夹不存在时候就创建文件夹，错误创建返回0*/
-static int make_the_dir(char *string){
+int make_the_dir(char *string){
   #ifdef __WIN32
   TCHAR docPath[MAX_PATH];
   if (GetFileAttributesA(string) == INVALID_FILE_ATTRIBUTES) {
