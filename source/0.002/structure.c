@@ -215,17 +215,27 @@ static wchar_t *new_wchar_text(wchar_t *__oldstr, int __language,
   /*
   !!交给其他软件修改newtext.text
   */
+  textfile = fopen(fileplace, "w");
   if (__oldstr != NULL) {
-    textfile = fopen(fileplace, "w");
     fwprintf(textfile, L"%ls", __oldstr);
-    fclose(textfile);
   }
+    fclose(textfile);
+  #ifdef __linux
   /*nano软件编辑text文件*/
   {
     char command_line[strlen(fileplace) + 20];
     strcat(strcpy(command_line, "nano "), fileplace);
     system(command_line);
   }
+  #endif
+  #ifdef __WIN32
+  /*notepad软件编辑text文件*/
+  {
+    char command_line[strlen(fileplace) + 20];
+    strcat(strcpy(command_line, "notepad /A "), fileplace);
+    system(command_line);
+  }
+  #endif
   /*
   **读取newtext.text
   */

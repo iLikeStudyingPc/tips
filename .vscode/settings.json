@@ -5,6 +5,7 @@
     "string.h": "c",
     "function.h": "c",
     "save.h": "c",
-    "structure.h": "c"
+    "structure.h": "c",
+    "stdio.h": "c"
   }
 }

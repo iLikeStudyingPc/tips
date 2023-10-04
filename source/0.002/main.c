@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
   if(Initialize()==NULL){
     char p[strlen(*argv)+16];
     Language_setting_interaction();
+    save_optons();
     return(EXIT_SUCCESS);
   };
   make_the_dir(workdirname.name[2]);
@@ -141,15 +142,15 @@ int main(int argc, char **argv) {
         char str[100] = "";
         sprintf(str, "%s -rf %s", *argv, p->str);
         if (thesystem == LINUX) {
-          wprintf(L"执行:%s\n", str);
+          wprintf(L"execute:%s\n", str);
         } else if (thesystem == WINDOWS) {
-          wprintf(L"执行:", str);
+          wprintf(L"execute:", str);
           printf("%s\n", str);
         }
         fflush(stdout);
         system(str);
       }else{
-        wprintf(L"拒绝删除\n");
+        wprintf(L"failed\n");
       }
     }
   } else if (thisopen.search == 1) { /*搜索笔记*/
@@ -187,8 +188,13 @@ int main(int argc, char **argv) {
       }else if(ch==-1){
         wprintf(L"%ls:%ls\n",language_pack.Empty_text_error,str);
       }
-      
+      if(!write_root_end(noderoot,workdirname.name[1])){
+        wprintf(L"%ls\n",language_pack.Archive_failed);
+      }
       /*add(p->str)*/
+    }
+    if(!write_root_end(noderoot,workdirname.name[1])){
+      wprintf(L"%ls\n",language_pack.Archive_failed);
     }
   } else if (thisopen.add == 1) { /*添加笔记*/
     wprintf(L"%ls:%d:\n",language_pack.add_note,count_str);
