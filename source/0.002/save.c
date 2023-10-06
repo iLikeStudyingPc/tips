@@ -1,10 +1,10 @@
 #include <stdio.h>
+#include "save.h"
 #include <stdlib.h>
 #include <string.h>
 
-#include "save.h"
 #include "function.h"
-
+#define __DEBIAN 1
 /*返回存档树的位置*/
 static void return_fileplace(void) {
 #ifdef __WIN32
@@ -35,14 +35,14 @@ static void return_fileplace(void) {
   if (!make_the_dir(workdirname.name[0])) exit(EXIT_FAILURE);
 #endif
 }
-/*软件开启准备活动,告诉软件存档位置，但是并不会读取这些存档,首次初始化返回NULL*/
-extern char *Initialize(void) {
+/*软件开启准备活动,告诉软件存档位置，但是并不会读取这些存档,首次初始化返回NULL,当mod==1时候重新初始化*/
+extern char *Initialize(int mod) {
   return_fileplace();
   char *workspace = malloc(100 * sizeof(char));
   *(workspace + 0) = '\0';
   strcat(strcpy(workspace, workdirname.name[0]), "setting.data");
   FILE *thespace = fopen(workspace, "r");
-  if (thespace == NULL) {
+  if (thespace == NULL||mod==1) {
     workdirname.language = english_US; /*默认语言设置为英文*/
     {
       /*
@@ -50,6 +50,7 @@ extern char *Initialize(void) {
       */
       strcat(strcpy(workdirname.name[1], workdirname.name[0]), "mytips.data");
       strcat(strcpy(workdirname.name[2], workdirname.name[0]), "txt_dir/");
+      strcat(strcpy(workdirname.name[4], workdirname.name[0]), "save/");
     }
     /*
     **创建初始化存档目录
@@ -76,6 +77,20 @@ extern char *Initialize(void) {
   }
   free(workspace);
   fclose(thespace);
+  if (workdirname.name[3][0] == '\0') {
+#ifdef __WIN32
+    strcpy(workdirname.name[3], "notepad");
+#elif __linux__
+    strcpy(workdirname.name[3], "nano");
+#endif
+  }
+  /*如果默认的编辑器不存在则申请修改编辑器*/
+  if (!detection_program_exist(workdirname.name[3])) {
+    /*设置失败*/
+    if (!set_txt_program()) {
+      exit(EXIT_FAILURE);
+    }
+  }
   return workdirname.name[0];
 }
 /*以只读2进制方式打开文件，打不开会返回NULL*/
@@ -115,7 +130,19 @@ int make_the_dir(char *string) {
     if (stat(string, &st) == -1) {
       // 文件夹不存在，创建文件夹
       if (!mkdir(string, 0777) == 0) {
-        wprintf(L"Unable to create folder\n");
+        wprintf(L"Create dir: %s\n", string);
+// debian
+#if __DEBIAN
+        char command[strlen(string) + 50];
+        strcat(strcpy(command, "sudo mkdir -p "), string);
+        system(command);
+        strcat(strcpy(command, "sudo chmod 777 "), string);
+        system(command);
+        if (stat(string, &st) != -1) {
+          return 1;
+        }
+#endif
+        printf("Unable to create folder\n");
         return 0;
       }
     }
@@ -124,14 +151,28 @@ int make_the_dir(char *string) {
   return 1;
 }
 void save_optons(void) {
-  char str[100];
+  char str[strlen(workdirname.name[0]) + 255];
   sprintf(str, "%s%s", workdirname.name[0], "setting.data");
   FILE *savefile = fopen(str, "w");
   if (savefile != NULL) {
     fwrite(&workdirname, sizeof(Workdirname2023927), 1, savefile);
     fclose(savefile);
   } else {
+    wprintf(L"save option error\n");
     exit(EXIT_FAILURE);
   }
   return;
+}
+
+/*
+ *用于设置软件文本编辑器软件
+ *设置失败，则返回0，设置成功就返回1,并修改workdirname.name[3]
+ */
+int change_txt_program(char *str) {
+  if (detection_program_exist(str)) {
+    strcpy(workdirname.name[3], str);
+    return 1;
+  } else {
+    return 0;
+  }
 }

@@ -1,48 +1,42 @@
-#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <wchar.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-static int make_the_dir(char *string){
-  #ifdef __WIN32
-  TCHAR docPath[MAX_PATH];
-  if (GetFileAttributesA(string) == INVALID_FILE_ATTRIBUTES) {
-    // 文件夹不存在，创建文件夹
-    if (!make_the_dir(string)) {
-      wprintf(L"Unable to create folder\n");
-      return 0;
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
+int detection_program_exist(char *str) {
+    char command[strlen(str)+40];
+#ifdef _WIN32
+    // Windows系统下的检测代码
+    sprintf(command, "where %s > nul 2>&1", str); // 使用where命令检测程序是否存在
+    if (system(command) == 0) {
+        return 1;
     }
-  }
-  #endif
-  #ifdef __linux__
-  {
-    struct stat st;
-    if (stat(string, &st) == -1) {
-    // 文件夹不存在，创建文件夹
-      if (!mkdir(string, 0777) == 0) {
-        wprintf(L"Unable to create folder\n");
-        return 0;
-      }
+#else
+    // Linux系统下的检测代码
+    sprintf(command, "command -v %s >/dev/null 2>&1", str); // 使用command -v检测程序是否存在
+    if (system(command) == 0) {
+        return 1;
     }
-  }
-  #endif
-  return 1;
+#endif
+
+    return 0;
 }
-int main(void) {
-  setlocale(LC_ALL, "zh_CN.utf8");
-  char filename[]="./helloworld/sav.c";
-  {
-    FILE *thisfile = fopen(filename, "wb+");
-    if (thisfile == NULL) {
-      char filedirname[strlen(filename) + 2];
-      strcpy(filedirname, filename);
-      char *p = strrchr(filedirname, '/');
-      *p = '\0';
-      wprintf(L"%s\n",filedirname);
-      make_the_dir(filedirname);
-      thisfile =fopen(filename, "wb+");
+
+int main() {
+    char programName[256];
+    printf("Enter the program name: ");
+    scanf("%s", programName);
+
+    if (detection_program_exist(programName)) {
+        printf("The program exists!\n");
+    } else {
+        printf("The program does not exist!\n");
     }
-  }
+
+    return 0;
 }

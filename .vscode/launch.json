@@ -37,7 +37,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/software/debug/mytips",
-      "args": ["-add","1"],
+      "args": ["-language","chinese_TW"],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],

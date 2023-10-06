@@ -7,6 +7,8 @@ typedef struct Workdirname2023 {
   !workdirname.name[0]:公共路径,公共路径里包含文件setting.data，存储其他软件的存档路径
   !workdirname.name[1]:软件tips基本结构体存档路径
   !workdirname.name[2]:文本编辑软件的存档路径
+  !workdirname.name[3]:文本编辑软件命令行
+  !workdirname.name[4]:软件save命令导出路径（注意读取是从导出路径读取的）
   */
   char name[10][100];
   /*设置的语言*/
@@ -30,31 +32,41 @@ extern char getch(void);
 #endif
 
 /*in rule.c*/
-
-/*命令行功能*/
 struct command_opention{
   int add;
   int change;
   int search;
-  int backup;
-  int restore;
+  int save;
+  int load;
   int help;
-  int man;
   int language;
   int version;
   int rm;
   int rf;
+  int settxt;
+  int all;
+  int name;
+  int content;
+  int new;
+  int old;
+  int backup;
+  int init;
 };
+extern int detection_program_exist(char *str);
 extern int whitch_command(char *str, struct command_opention *thisopention);
 extern int regular_name(wchar_t *str);
 extern int regular_command(char *str);
+extern int set_txt_program(void);
+
 
 
 
 /*in language.c*/
 
+/*添加语言时候记得修改这里的字符串列表*/
+#define Count_language (12)
+
 void Language_setting_interaction(void);
-void Language_setting_str(const char *str);
 enum p {
   english_US = 0,
   english_GB,
@@ -89,6 +101,11 @@ struct LANGUNAGE_SUPPORT {
   wchar_t Empty_text_error[80];//空文本错误
   wchar_t add_note[80];//添加笔记条目
   wchar_t Entry_already_exists[80];//条目已存在
+  wchar_t Please_enter_a_new_text_editor_name[80];
+  wchar_t Text_editor_name_modified_successfully[80];
+  wchar_t Text_editor_name_modification_failed[80];
+  wchar_t please_enter_a_new_note_name[80];//请输入新的笔记名称
+  wchar_t Naming_conflict_existing_note_already_exists[80];//命名冲突，现有笔记已经存在
   //修改条目
 }; /*结构体请由末尾加入新文本，进行顺序的设置*/
 extern struct LANGUNAGE_SUPPORT language_pack;

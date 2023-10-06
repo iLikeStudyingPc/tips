@@ -119,13 +119,14 @@ static void delete_node(struct tree *delnode) {
   free(delnode->tip);
   if (delnode->previous != NULL) {
     delnode->previous->next = delnode->next;
-  } else if(delnode->next != NULL){ /*根节点并且下个节点不为空时候当心，不可以清理根节点*/
-    struct tree *p=delnode->next;
-    delnode->tip=p->tip;
-    delnode->next=p->next;
+  } else if (delnode->next !=
+             NULL) { /*根节点并且下个节点不为空时候当心，不可以清理根节点*/
+    struct tree *p = delnode->next;
+    delnode->tip = p->tip;
+    delnode->next = p->next;
     free(p);
     return;
-  }else{
+  } else {
     return;
   }
   /*下个节点不为空*/
@@ -153,7 +154,7 @@ int treeadd(struct tree *root, wchar_t *str) {
   strcat(__filename, ".txt");
   if (curr == NULL) { /*如果搜到为空则添加*/
     wchar_t *new_text = new_wchar_text(NULL, workdirname.language, __filename);
-    if (new_text == NULL) {
+    if (new_text == NULL || new_text[0] == L'\0') {
       /*文本为空不添加*/
       return -1;
     }
@@ -162,6 +163,41 @@ int treeadd(struct tree *root, wchar_t *str) {
         newtipcontent(&new_text, str, workdirname.language);
     // wprintf(L"新树内存写入：\n%ls\n",*(thenew->mincontent));
     insert_node(root, thenew);
+    return 1;
+  } else {
+    return 0;
+  }
+}
+/*编辑树的名字，树存在并编辑成功返回1，文本为空错误不修改返回-1,发现了旧的笔记名字冲突返回-2，如果名字不符合规范返回-3,笔记不存在返回0*/
+int treenamechange(struct tree *root, wchar_t *str, int mod) {
+  struct tree *curr = treesearch(root, str);
+  if (curr != NULL) { /*如果搜到不为空则编辑笔记名称*/
+    wchar_t newname[worknamemax];
+    wprintf(L"%ls:%ls",str,language_pack.please_enter_a_new_note_name);
+    fgetws(newname, worknamemax, stdin);
+    int wclen = wcslen(newname);
+    if (wclen <= 1) {
+      return -1;
+    }
+    newname[wclen - 1] = L'\0';
+    /*如果符号不符合规范则错误提示*/
+    if(regular_name(newname)==0){
+      wprintf(L"%ls%ls\n", language_pack.Illegal_characters,
+              L"@#+_-=,.:");
+      return -3;
+    }
+    /*如果发现了旧的笔记名字冲突*/
+    if(treesearch(root,newname)!=NULL){
+      wprintf(L"%ls\n",language_pack.Naming_conflict_existing_note_already_exists);
+      return -2;
+    }
+    wcscpy(curr->tip->name, newname);
+    if (mod == 1) {
+      int ch = treechange(curr, newname);
+      if (ch == -1) {
+        wprintf(L"%ls:%ls\n", language_pack.Empty_text_error,newname);
+      }
+    }
     return 1;
   } else {
     return 0;
@@ -176,7 +212,7 @@ int treechange(struct tree *root, wchar_t *str) {
   if (curr != NULL) { /*如果搜到不为空则编辑*/
     wchar_t *new_text =
         new_wchar_text(curr->tip->mincontent, curr->tip->language, __filename);
-    if (new_text == NULL) {
+    if (new_text == NULL || new_text[0] == L'\0') {
       /*文本为空不修改*/
       return -1;
     }
@@ -219,23 +255,13 @@ static wchar_t *new_wchar_text(wchar_t *__oldstr, int __language,
   if (__oldstr != NULL) {
     fwprintf(textfile, L"%ls", __oldstr);
   }
-    fclose(textfile);
-  #ifdef __linux
-  /*nano软件编辑text文件*/
+  fclose(textfile);
   {
     char command_line[strlen(fileplace) + 20];
-    strcat(strcpy(command_line, "nano "), fileplace);
+    sprintf(command_line, "%s ", workdirname.name[3]);
+    strcat(command_line, fileplace);
     system(command_line);
   }
-  #endif
-  #ifdef __WIN32
-  /*notepad软件编辑text文件*/
-  {
-    char command_line[strlen(fileplace) + 20];
-    strcat(strcpy(command_line, "notepad /A "), fileplace);
-    system(command_line);
-  }
-  #endif
   /*
   **读取newtext.text
   */

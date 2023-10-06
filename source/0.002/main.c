@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
-#include "structure.h"
 #include "save.h"
+#include "structure.h"
 #define ___DEBUGOPEN 0
 /*
 **命令行非控制文本
@@ -32,17 +33,18 @@ void exitnow(void) {
 主程序
 */
 int main(int argc, char **argv) {
-  if(Initialize()==NULL){
-    char p[strlen(*argv)+16];
+  if (Initialize(0) == NULL) {
+    char p[strlen(*argv) + 16];
     Language_setting_interaction();
     save_optons();
-    return(EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
   };
   make_the_dir(workdirname.name[2]);
+  make_the_dir(workdirname.name[4]);
   set_language(workdirname.language);
-  if(workdirname.version<VERSION){
-    wprintf(L"%ls\n",language_pack.Version_update_operation_in_progress);
-    workdirname.version=VERSION;
+  if (workdirname.version < VERSION) {
+    wprintf(L"%ls\n", language_pack.Version_update_operation_in_progress);
+    workdirname.version = VERSION;
   }
   if (thesystem == WINDOWS) {
     system("chcp 65001&&cls");
@@ -51,7 +53,8 @@ int main(int argc, char **argv) {
     wprintf(L"%ls\n", language_pack.Help);
     exit(EXIT_SUCCESS);
   }
-  struct command_opention thisopen = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  struct command_opention thisopen = {0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                      0, 0, 0, 0, 0, 0, 0, 0,0};
   /*
   !在自检操作之前并未设置退出操作
   */
@@ -60,14 +63,14 @@ int main(int argc, char **argv) {
   /*
   **初始化noderoot节点树
   */
-  struct tree *noderoot=rootstart(workdirname.name[1]);
+  struct tree *noderoot = rootstart(workdirname.name[1]);
 
   int count_command = 0;
   int count_str = 0;
   for (char **p = argv; *++p != NULL;) {
     if (regular_command(*p) == 0) { /*非法命令就退出*/
       wprintf(L"%ls%ls\n", language_pack.Illegal_characters,
-              L"@#+_-=,./:"); /*非法字符，你只能使用合法字符，例如:@#+_-=,./:*/
+              L"@#+_-=,.:"); /*非法字符，你只能使用合法字符，例如:@#+_-=,./:*/
       return EXIT_FAILURE;
     } else if (**p == '-') {
       count_command += 1;
@@ -111,27 +114,35 @@ int main(int argc, char **argv) {
     wprintf(L"%ls %.3f\n", language_pack.Version, workdirname.version);
   } else if (thisopen.help == 1) {
     wprintf(L"%ls\n", language_pack.Help);
+  } else if (thisopen.settxt == 1) {
+    set_txt_program();
   } else if (thisopen.rf == 1) { /*删除笔记*/
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
       wchar_t str[worknamemax];
-      mbstowcs(str, p->str,sizeof(str));
-      int ch=tree_remove_node(noderoot,str);
-      switch(ch){
-        case 1:wprintf(L"%ls:%s\n",language_pack.Complete_the_deletion_operation,p->str);break;
-        case 0:wprintf(L"%ls:%s\n",language_pack.Entry_not_found,p->str);break;
+      mbstowcs(str, p->str, sizeof(str));
+      int ch = tree_remove_node(noderoot, str);
+      switch (ch) {
+        case 1:
+          wprintf(L"%ls:%s\n", language_pack.Complete_the_deletion_operation,
+                  p->str);
+          break;
+        case 0:
+          wprintf(L"%ls:%s\n", language_pack.Entry_not_found, p->str);
+          break;
       }
       /*add(p->str)*/
     }
-    if(!write_root_end(noderoot,workdirname.name[1])){
-      wprintf(L"%ls\n",language_pack.Archive_failed);
+    if (!write_root_end(noderoot, workdirname.name[1])) {
+      wprintf(L"%ls\n", language_pack.Archive_failed);
     }
   } else if (thisopen.rm == 1) { /*询问是否删除笔记*/
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
-      if(thesystem==WINDOWS){
-        wprintf(L"%ls",language_pack.do_you_want_remove_note);
-        printf("%s  <y,n>\n",p->str);
-      }else if(thesystem==LINUX){
-        wprintf(L"%ls %s  <y,n>\n",language_pack.do_you_want_remove_note,p->str);
+      if (thesystem == WINDOWS) {
+        wprintf(L"%ls", language_pack.do_you_want_remove_note);
+        printf("%s  <y,n>\n", p->str);
+      } else if (thesystem == LINUX) {
+        wprintf(L"%ls %s  <y,n>\n", language_pack.do_you_want_remove_note,
+                p->str);
       }
       fflush(stdout);
       int ch = 0;
@@ -149,7 +160,7 @@ int main(int argc, char **argv) {
         }
         fflush(stdout);
         system(str);
-      }else{
+      } else {
         wprintf(L"failed\n");
       }
     }
@@ -157,106 +168,148 @@ int main(int argc, char **argv) {
   gotosearch:
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
       wchar_t str[worknamemax];
-      mbstowcs(str, p->str,sizeof(str));
-      struct tree *thistree=treesearch(noderoot,str);
-      if(thistree!=NULL&&thistree->tip!=NULL){
-        wprintf(L"%ls:%ls\n",language_pack.Found_Entry,str);
-        int a=workdirname.language;
-        if(a!=thistree->tip->language){
+      mbstowcs(str, p->str, sizeof(str));
+      struct tree *thistree = treesearch(noderoot, str);
+      if (thistree != NULL && thistree->tip != NULL) {
+        char timestr[50];
+        strftime(timestr, 50, "%Y-%m-%d_%H:%M:%S", localtime(&(thistree->tip->create_time)));
+        wprintf(L"%ls:%ls(create time:%s)\n", language_pack.Found_Entry,str,timestr);
+        int a = workdirname.language;
+        if (a != thistree->tip->language) {
           set_language(thistree->tip->language);
-          wprintf(L"%ls\n",(thistree->tip->mincontent));
+          wprintf(L"%ls\n", (thistree->tip->mincontent));
           fflush(stdout);
           set_language(a);
-        }else{
-          wprintf(L"%ls\n",(thistree->tip->mincontent));
+        } else {
+          wprintf(L"%ls\n", (thistree->tip->mincontent));
           fflush(stdout);
         }
-      }else{
-        wprintf(L"%ls:%ls\n",language_pack.Entry_not_found,str);
+      } else {
+        wprintf(L"%ls:%ls\n", language_pack.Entry_not_found, str);
       }
     }
   } else if (thisopen.change == 1) { /*修改笔记，如果笔记不存在则添加笔记*/
-    wprintf(L"%ls %d:\n",language_pack.Modifying_Note_Entries,count_str);
-    for (struct command_str *p = &root; (p = p->next) != NULL;) {
-      wchar_t str[worknamemax];
-      mbstowcs(str, p->str, sizeof(str));
-      int ch=treechange(noderoot,str);
-      if(ch==1){
-        wprintf(L"%ls:%ls\n",language_pack.complete,str);
-      }else if(ch==0){
-        wprintf(L"%ls:%ls\n",language_pack.Entry_not_found,str);
-      }else if(ch==-1){
-        wprintf(L"%ls:%ls\n",language_pack.Empty_text_error,str);
+    wprintf(L"%ls %d:\n", language_pack.Modifying_Note_Entries, count_str);
+    /*2级别参数*/
+    if (thisopen.all == 1) {
+      for (struct command_str *p = &root; (p = p->next) != NULL;) {
+        wchar_t str[worknamemax];
+        mbstowcs(str, p->str, sizeof(str));
+        int ch = treenamechange(noderoot, str, 1);
+        if (ch == 1) {
+          wprintf(L"%ls:%ls\n", language_pack.complete, str);
+        } else if (ch == 0) {
+          wprintf(L"%ls:%ls\n", language_pack.Entry_not_found, str);
+        } else if (ch == -1) {
+          wprintf(L"%ls:%ls\n", language_pack.Empty_text_error, str);
+        }
+        /*add(p->str)*/
       }
-      if(!write_root_end(noderoot,workdirname.name[1])){
-        wprintf(L"%ls\n",language_pack.Archive_failed);
+    } else if (thisopen.name == 1) {
+      for (struct command_str *p = &root; (p = p->next) != NULL;) {
+        wchar_t str[worknamemax];
+        mbstowcs(str, p->str, sizeof(str));
+        int ch = treenamechange(noderoot, str, 0);
+        if (ch == 1) {
+          wprintf(L"%ls:%ls\n", language_pack.complete, str);
+        } else if (ch == 0) {
+          wprintf(L"%ls:%ls\n", language_pack.Entry_not_found, str);
+        } else if (ch == -1) {
+          wprintf(L"%ls:%ls\n", language_pack.Empty_text_error, str);
+        }
+        /*add(p->str)*/
       }
-      /*add(p->str)*/
+    } else if (thisopen.content == 1) {
+      for (struct command_str *p = &root; (p = p->next) != NULL;) {
+        wchar_t str[worknamemax];
+        mbstowcs(str, p->str, sizeof(str));
+        int ch = treechange(noderoot, str);
+        if (ch == 1) {
+          wprintf(L"%ls:%ls\n", language_pack.complete, str);
+        } else if (ch == 0) {
+          wprintf(L"%ls:%ls\n", language_pack.Entry_not_found, str);
+        } else if (ch == -1) {
+          wprintf(L"%ls:%ls\n", language_pack.Empty_text_error, str);
+        }
+        /*add(p->str)*/
+      }
     }
-    if(!write_root_end(noderoot,workdirname.name[1])){
-      wprintf(L"%ls\n",language_pack.Archive_failed);
+    if (!write_root_end(noderoot, workdirname.name[1])) {
+      wprintf(L"%ls\n", language_pack.Archive_failed);
     }
   } else if (thisopen.add == 1) { /*添加笔记*/
-    wprintf(L"%ls:%d:\n",language_pack.add_note,count_str);
+    wprintf(L"%ls:%d:\n", language_pack.add_note, count_str);
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
       wchar_t str[worknamemax];
       mbstowcs(str, p->str, sizeof(str));
-      int ch=treeadd(noderoot,str);
-      if(ch==1){
-        wprintf(L"%ls:%ls\n",language_pack.complete,str);
-      }else if(ch==0){
-        wprintf(L"%ls:%ls\n",language_pack.Entry_already_exists,str);
-      }else if(ch==-1){
-        wprintf(L"%ls:%ls\n",language_pack.Empty_text_error,str);
+      int ch = treeadd(noderoot, str);
+      if (ch == 1) {
+        wprintf(L"%ls:%ls\n", language_pack.complete, str);
+      } else if (ch == 0) {
+        wprintf(L"%ls:%ls\n", language_pack.Entry_already_exists, str);
+      } else if (ch == -1) {
+        wprintf(L"%ls:%ls\n", language_pack.Empty_text_error, str);
       }
       /*add(p->str)*/
     }
-    if(!write_root_end(noderoot,workdirname.name[1])){
-      wprintf(L"%ls\n",language_pack.Archive_failed);
+    if (!write_root_end(noderoot, workdirname.name[1])) {
+      wprintf(L"%ls\n", language_pack.Archive_failed);
     }
-  } else if (thisopen.restore == 1) { /*备份*/
-    ;
-  } else if (thisopen.backup == 1) { /*恢复*/
-    ;
+  } else if (thisopen.load == 1) { /*备份*/
+    if (thisopen.old == 1) {
+    } else if (thisopen.new == 1) {
+    } else if (thisopen.backup == 1) {
+    }
+  } else if (thisopen.save == 1) { /*恢复*/
+
+    char str[160] = "\0";
+    char timestr[50] = "\0";
+    time_t c;
+    time(&c);
+    strftime(timestr, 50, "%Y-%m-%d_%H:%M:%S", localtime(&c));
+    sprintf(str, "%s%s.data", workdirname.name[4], timestr);
+    wprintf(L"save:%s\n", str);
+    if (!write_root_end(noderoot, str)) {
+      wprintf(L"%ls\n", language_pack.Archive_failed);
+    }
   } else if (thisopen.language == 1) { /*语言设定*/
     if ((root.next) != NULL) {
       if (string_all_digits(root.next->str)) {
         set_language(atoi(root.next->str));
-      } else {
-        Language_setting_str(root.next->next->str);
       }
     } else {
       Language_setting_interaction();
     };
-  } else if (thisopen.man == 1) { /*man手册翻译选项*/
-    ;
+  }else if(thisopen.init==1){/*重新初始化*/
+    Initialize(1);
+    wprintf(L"finish....\n");
   }
   /*debug show tree*/
 #if ___DEBUGOPEN
   wprintf(L"\n-------------------------------------\n以下是调试消息:\n");
-  int debug=0;
-  while(noderoot->tip!=NULL){
-    if(noderoot->tip!=NULL){
-      wprintf(L"%d name:%ls\nmincontent:\n",++debug,noderoot->tip->name);
-      int a=workdirname.language;
-        if(a!=noderoot->tip->language){
-          set_language(noderoot->tip->language);
-          wprintf(L"%ls\n",(noderoot->tip->mincontent));
-          fflush(stdout);
-          set_language(a);
-        }else{
-          wprintf(L"%ls\n",(noderoot->tip->mincontent));
-          fflush(stdout);
-        }
+  int debug = 0;
+  while (noderoot->tip != NULL) {
+    if (noderoot->tip != NULL) {
+      wprintf(L"%d name:%ls\nmincontent:\n", ++debug, noderoot->tip->name);
+      int a = workdirname.language;
+      if (a != noderoot->tip->language) {
+        set_language(noderoot->tip->language);
+        wprintf(L"%ls\n", (noderoot->tip->mincontent));
+        fflush(stdout);
+        set_language(a);
+      } else {
+        wprintf(L"%ls\n", (noderoot->tip->mincontent));
+        fflush(stdout);
+      }
     }
-    noderoot=noderoot->next;
+    noderoot = noderoot->next;
   }
   free(noderoot);
   /*wprintf(L"\nadd:%d "
-  L"backup:%d "
+  L"save:%d "
   L"search:%d "
   L"search:%d "
-  L"language:%d\n",thisopen.add,thisopen.backup,thisopen.search,thisopen.man,thisopen.language);
+  L"language:%d\n",thisopen.add,thisopen.save,thisopen.search,thisopen.man,thisopen.language);
   */
 #endif
   return EXIT_SUCCESS;

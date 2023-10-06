@@ -10,9 +10,7 @@
 struct LANGUNAGE_SUPPORT language_pack;
 static void language_group_set(int select);
 void Language_setting_interaction(void);
-void Language_setting_str(const char *str);
-/*添加语言时候记得修改这里的字符串列表*/
-#define Count_language (12)
+
 static char c_language[Count_language][(18)] = {
     "english_US\0",  // 0
     "english_GB\0",    "chinese_CN\0", "chinese_TW\0", "french_FR\0",
@@ -111,17 +109,6 @@ void Language_setting_interaction(void) {
   }
   return;
 }
-/*终端非交互形式设置语言*/
-void Language_setting_str(const char *str) {
-  for (int i = 0; i < Count_language; i++) {
-    wprintf(L"%d:%s", i, c_language[i]);
-    if (strcmp(c_language[i], str) == 0) {
-      set_language(i);
-      return;
-    }
-  }
-  return;
-}
 /*设置语言集显示内容*/
 static void language_group_set(int select) {
   switch (select) {
@@ -147,7 +134,13 @@ static void language_group_set(int select) {
           L"Completed",
           L"Empty text error",
           L"Add note entry",
-          L"Entry already exists"};
+          L"Entry already exists",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -170,7 +163,13 @@ static void language_group_set(int select) {
           L"Completed",
           L"Empty text error",
           L"Add note entry",
-          L"Entry already exists"};
+          L"Entry already exists",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -191,7 +190,13 @@ static void language_group_set(int select) {
           L"完成",
           L"空文本错误",
           L"添加笔记条目",
-          L"条目已存在"};
+          L"条目已存在",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -212,7 +217,13 @@ static void language_group_set(int select) {
           L"完成",
           L"空文本錯誤",
           L"新增筆記項目",
-          L"項目已存在"};
+          L"項目已存在",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -236,7 +247,13 @@ static void language_group_set(int select) {
           L"Terminé",
           L"Erreur de texte vide",
           L"Ajouter une entrée de note",
-          L"entrée existe déjà"};
+          L"entrée existe déjà" /*setlang*/,
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -260,7 +277,13 @@ static void language_group_set(int select) {
           L"Completado",
           L"Error de texto vacío",
           L"Añadir entrada de nota",
-          L"a entrada ya existe"};
+          L"a entrada ya existe",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -282,7 +305,13 @@ static void language_group_set(int select) {
           L"اكتمل",
           L"خطأ في النص الفارغ",
           L"إضافة مدخل الملاحظة",
-          L"العنصر موجود بالفعل"};
+          L"العنصر موجود بالفعل",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -305,7 +334,13 @@ static void language_group_set(int select) {
           L"Abgeschlossen",
           L"Leerer Textfehler",
           L"Notizeintrag hinzufügen",
-          L"Eintrag existiert bereits"};
+          L"Eintrag existiert bereits",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -329,7 +364,13 @@ static void language_group_set(int select) {
           L"Завершено",
           L"Ошибка пустого текста",
           L"Добавить запись заметки",
-          L"Запись уже существует"};
+          L"Запись уже существует",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -352,7 +393,13 @@ static void language_group_set(int select) {
           L"Concluído",
           L"Erro de texto vazio",
           L" Adicionar entrada da nota",
-          L"A entrada já existe"};
+          L"A entrada já existe",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
     } break;
 
@@ -374,7 +421,13 @@ static void language_group_set(int select) {
           L"Fuldført",
           L"Tom tekstfejl",
           L"Tilføj noteindgang",
-          L"Indgangen findes allerede"};
+          L"Indgangen findes allerede",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
       break;
     }
@@ -396,7 +449,13 @@ static void language_group_set(int select) {
           L"完了",
           L"空のテキストエラー",
           L"ノートのエントリを追加します",
-          L"エントリはすでに存在しています"};
+          L"エントリはすでに存在しています",
+          L"请输入新的文本编辑器名称",
+          L"文本编辑器名修改成功",
+          L"文本编辑器名修改失败",
+          L"请输入新的笔记名称：",
+          L"命名冲突，现有笔记已经存在"
+          /*setlang*/};
       language_pack = setlanguage;
       break;
     }

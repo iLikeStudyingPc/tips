@@ -6,6 +6,8 @@
     "function.h": "c",
     "save.h": "c",
     "structure.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "unistd.h": "c",
+    "cwchar": "c"
   }
 }
