@@ -136,8 +136,10 @@ int make_the_dir(char *string) {
         char command[strlen(string) + 50];
         strcat(strcpy(command, "sudo mkdir -p "), string);
         system(command);
+        if(command[strlen(command)-1]!='/'){
         strcat(strcpy(command, "sudo chmod 777 "), string);
         system(command);
+        }
         if (stat(string, &st) != -1) {
           return 1;
         }
