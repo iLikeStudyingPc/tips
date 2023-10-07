@@ -2,8 +2,13 @@
 #include "save.h"
 #include <stdlib.h>
 #include <string.h>
-
 #include "function.h"
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <dirent.h>
+#include <sys/stat.h>
+#endif
 #define __DEBIAN 1
 /*返回存档树的位置*/
 static void return_fileplace(void) {
@@ -136,10 +141,8 @@ int make_the_dir(char *string) {
         char command[strlen(string) + 50];
         strcat(strcpy(command, "sudo mkdir -p "), string);
         system(command);
-        if(command[strlen(command)-1]!='/'){
         strcat(strcpy(command, "sudo chmod 777 "), string);
         system(command);
-        }
         if (stat(string, &st) != -1) {
           return 1;
         }
@@ -177,4 +180,115 @@ int change_txt_program(char *str) {
   } else {
     return 0;
   }
+}
+
+/*
+这个函数用于判断给定路径是否是一个目录。
+使用方法：
+int result = is_directory("/path/to/directory");
+if (result) {
+    printf("给定路径是一个目录。\n");
+} else {
+    printf("给定路径不是一个目录。\n");
+}
+*/
+int is_directory(const char *path) {
+#ifdef _WIN32
+    DWORD attributes = GetFileAttributesA(path);
+    return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
+#else
+    struct stat file_stat;
+    if (stat(path, &file_stat) == 0) {
+        return S_ISDIR(file_stat.st_mode);
+    }
+    return 0;
+#endif
+}
+
+
+/*filedir是一个文件夹，在Windows和linux中运行，首先检测文件夹有效性，然后进入到目录内，返回一系列该目录中的文件名，但不返回文件夹名，
+  get_files这个函数返回给定目录中的文件名数组。返回的数组以NULL结尾。
+  使用方法：
+  char **files = get_files("/path/to/directory");
+    if (files == NULL) {
+    printf("无法返回文件。\n");
+    return 1;
+  }
+  for (int i = 0; files[i] != NULL; i++) {
+    printf("%s\n", files[i]);
+    free(files[i]);
+  }
+  free(files);
+*/
+char **get_files(const char *directory) {
+    DIR *dir;
+    struct dirent *entry;
+
+    dir = opendir(directory);
+    if (dir == NULL) {
+        return NULL;
+    }
+
+    char **files = malloc(100 * sizeof(char *));
+    int count = 0;
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        char file_path[1024];
+        snprintf(file_path, sizeof(file_path), "%s/%s", directory, entry->d_name);
+
+        if (!is_directory(file_path)) {
+            files[count] = malloc(strlen(entry->d_name) + 1);
+            strcpy(files[count], entry->d_name);
+            count++;
+        }
+    }
+    closedir(dir);
+    files[count] = NULL;
+    return files;
+}
+
+/*在文件夹里选择文件,无文件则返回0*/
+char *_chosefile(char *str) {
+  char **files = get_files(workdirname.name[4]);
+  int length=0,chose=0,ch=0;
+  /*取得文件列表长度*/
+  for (length = 0; files[length] != NULL; length++);
+  if(length==0){
+    return NULL;
+  }
+  do{
+    /*控制选择列表箭头*/
+    switch(ch){
+      case 72:chose-=1;break;
+      case 80:chose+=1;break;
+    }
+    if(chose<0){
+      chose=length-1;
+    }else if(chose>=length){
+      chose=0;
+    }
+    #ifdef __WIN32
+    system("cls");
+    #elif __linux__
+    system("clear");
+    #endif
+    /*注意限制范围!!!*/
+    wprintf(L"%ls\n",language_pack.Please_select_an_archive_to_load);
+    for(int i=chose-2;i<chose+3;i++){
+      if(i<0){
+        wprintf(L"^^^^^^^^^^^^^^^^^^^^^^\n");
+      }else if(i>=length){
+        wprintf(L"vvvvvvvvvvvvvvvvvvvvvv\n");
+      }else{
+        wprintf(L"%s",files[i]);
+        if(i==chose) wprintf(L" <--choise");
+        wprintf(L"\n");
+      }
+    }
+  }while((ch=getch())!='\r'&&ch!='\n');
+  return files[chose];
 }

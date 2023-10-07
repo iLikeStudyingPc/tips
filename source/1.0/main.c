@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     exit(EXIT_SUCCESS);
   }
   struct command_opention thisopen = {0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                      0, 0, 0, 0, 0, 0, 0, 0,0};
+                                      0, 0, 0, 0, 0, 0, 0, 0, 0};
   /*
   !在自检操作之前并未设置退出操作
   */
@@ -172,8 +172,10 @@ int main(int argc, char **argv) {
       struct tree *thistree = treesearch(noderoot, str);
       if (thistree != NULL && thistree->tip != NULL) {
         char timestr[50];
-        strftime(timestr, 50, "%Y-%m-%d_%H:%M:%S", localtime(&(thistree->tip->create_time)));
-        wprintf(L"%ls:%ls(create time:%s)\n", language_pack.Found_Entry,str,timestr);
+        strftime(timestr, 50, "%Y-%m-%d_%H:%M:%S",
+                 localtime(&(thistree->tip->create_time)));
+        wprintf(L"%ls:%ls(create time:%s)\n", language_pack.Found_Entry, str,
+                timestr);
         int a = workdirname.language;
         if (a != thistree->tip->language) {
           set_language(thistree->tip->language);
@@ -256,19 +258,40 @@ int main(int argc, char **argv) {
       wprintf(L"%ls\n", language_pack.Archive_failed);
     }
   } else if (thisopen.load == 1) { /*备份*/
+  char* thisfile=_chosefile(workdirname.name[4]);
+  if(thisfile==NULL){
+    wprintf(L"%ls\n",language_pack.The_folder_is_empty_or_does_not_exist);
+    return EXIT_SUCCESS;
+  }
+  wprintf(L"%ls:%s\n",language_pack.Found_Entry,thisfile);
+  /*所选择的文件的带上文件路径的文件名*/
+  char fileplace[strlen(workdirname.name[4])+strlen(thisfile)+1];
+  sprintf(fileplace,"%s%s",workdirname.name[4],thisfile);
     if (thisopen.old == 1) {
+      struct tree *newroot = rootstart(fileplace);
+      treeload(noderoot,newroot,-1);
     } else if (thisopen.new == 1) {
+      struct tree *newroot = rootstart(fileplace);
+      treeload(noderoot,newroot,1);
     } else if (thisopen.backup == 1) {
+      noderoot = rootstart(fileplace);
+    }else if(thisopen.content==1){
+      struct tree *newroot = rootstart(fileplace);
+      treeload(noderoot,newroot,0);
+    }
+    wprintf(L"%ls\n",language_pack.Archive_replacement_completed);
+    /*存档*/
+    if (!write_root_end(noderoot, workdirname.name[1])) {
+      wprintf(L"%ls\n", language_pack.Archive_failed);
     }
   } else if (thisopen.save == 1) { /*恢复*/
-
     char str[160] = "\0";
     char timestr[50] = "\0";
     time_t c;
     time(&c);
     strftime(timestr, 50, "%Y-%m-%d_%H:%M:%S", localtime(&c));
     sprintf(str, "%s%s.data", workdirname.name[4], timestr);
-    wprintf(L"save:%s\n", str);
+    wprintf(L"%ls:%s\n", language_pack.save, str);
     if (!write_root_end(noderoot, str)) {
       wprintf(L"%ls\n", language_pack.Archive_failed);
     }
@@ -280,7 +303,7 @@ int main(int argc, char **argv) {
     } else {
       Language_setting_interaction();
     };
-  }else if(thisopen.init==1){/*重新初始化*/
+  } else if (thisopen.init == 1) { /*重新初始化*/
     Initialize(1);
     wprintf(L"finish....\n");
   }

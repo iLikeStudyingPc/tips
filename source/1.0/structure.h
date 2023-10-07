@@ -23,3 +23,4 @@ int write_root_end(struct tree *root, char *str);
 int treechange(struct tree *root,wchar_t *str);
 int tree_remove_node(struct tree *root,wchar_t *str);
 int treenamechange(struct tree *root,wchar_t *str,int mod);
+int treeload(struct tree *root, struct tree *loadtree, int mod);

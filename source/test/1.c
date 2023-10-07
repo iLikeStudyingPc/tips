@@ -5,38 +5,103 @@
 #ifdef _WIN32
 #include <windows.h>
 #else
-#include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #endif
 
-int detection_program_exist(char *str) {
-    char command[strlen(str)+40];
+int is_directory(const char *path);
+void print_files(const char *directory);
+char **get_files(const char *directory);
+
+int is_directory(const char *path) {
 #ifdef _WIN32
-    // Windows系统下的检测代码
-    sprintf(command, "where %s > nul 2>&1", str); // 使用where命令检测程序是否存在
-    if (system(command) == 0) {
-        return 1;
-    }
+    DWORD attributes = GetFileAttributesA(path);
+    return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
 #else
-    // Linux系统下的检测代码
-    sprintf(command, "command -v %s >/dev/null 2>&1", str); // 使用command -v检测程序是否存在
-    if (system(command) == 0) {
-        return 1;
+    struct stat file_stat;
+    if (stat(path, &file_stat) == 0) {
+        return S_ISDIR(file_stat.st_mode);
     }
-#endif
-
     return 0;
+#endif
+}
+
+void print_files(const char *directory) {
+    DIR *dir;
+    struct dirent *entry;
+
+    dir = opendir(directory);
+    if (dir == NULL) {
+        return;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        char file_path[1024];
+        snprintf(file_path, sizeof(file_path), "%s/%s", directory, entry->d_name);
+
+        if (!is_directory(file_path)) {
+            printf("%s\n", entry->d_name);
+        }
+    }
+
+    closedir(dir);
+}
+
+char **get_files(const char *directory) {
+    DIR *dir;
+    struct dirent *entry;
+
+    dir = opendir(directory);
+    if (dir == NULL) {
+        return NULL;
+    }
+
+    char **files = malloc(100 * sizeof(char *));
+    int count = 0;
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        char file_path[1024];
+        snprintf(file_path, sizeof(file_path), "%s/%s", directory, entry->d_name);
+
+        if (!is_directory(file_path)) {
+            files[count] = malloc(strlen(entry->d_name) + 1);
+            strcpy(files[count], entry->d_name);
+            count++;
+        }
+    }
+
+    closedir(dir);
+
+    files[count] = NULL;
+    return files;
 }
 
 int main() {
-    char programName[256];
-    printf("Enter the program name: ");
-    scanf("%s", programName);
+    const char *directory = "/"; // 示例文件夹路径
 
-    if (detection_program_exist(programName)) {
-        printf("The program exists!\n");
-    } else {
-        printf("The program does not exist!\n");
+    printf("打印文件夹中的文件:\n");
+    print_files(directory);
+
+    printf("\n返回文件夹中的文件:\n");
+    char **files = get_files(directory);
+    if (files == NULL) {
+        printf("无法返回文件。\n");
+        return 1;
     }
+
+    for (int i = 0; files[i] != NULL; i++) {
+        printf("%s\n", files[i]);
+        free(files[i]);
+    }
+    free(files);
 
     return 0;
 }

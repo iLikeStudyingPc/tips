@@ -8,6 +8,8 @@
 #include "time.h"
 static void insert_node(struct tree *curr, struct tipcontent *newtip);
 static void delete_node(struct tree *delnode);
+static wchar_t *new_wchar_text(wchar_t *__oldstr, int __language,
+                               char *filename);
 /*创建一个新节点,返回指向节点的指针，为动态内存分配，可释放*/
 struct tipcontent *newtipcontent(wchar_t **mincontent, wchar_t *name,
                                  int uselanguage) {
@@ -18,8 +20,6 @@ struct tipcontent *newtipcontent(wchar_t **mincontent, wchar_t *name,
   time(&(tip->create_time));
   return tip;
 }
-static wchar_t *new_wchar_text(wchar_t *__oldstr, int __language,
-                               char *filename);
 
 /*读取文件链表并返回根指针，如果文件链表不存在就创建链表并初始化根指针,无法创建返回NULL*/
 struct tree *rootstart(char *str) {
@@ -173,7 +173,7 @@ int treenamechange(struct tree *root, wchar_t *str, int mod) {
   struct tree *curr = treesearch(root, str);
   if (curr != NULL) { /*如果搜到不为空则编辑笔记名称*/
     wchar_t newname[worknamemax];
-    wprintf(L"%ls:%ls",str,language_pack.please_enter_a_new_note_name);
+    wprintf(L"%ls:%ls", str, language_pack.please_enter_a_new_note_name);
     fgetws(newname, worknamemax, stdin);
     int wclen = wcslen(newname);
     if (wclen <= 1) {
@@ -181,21 +181,21 @@ int treenamechange(struct tree *root, wchar_t *str, int mod) {
     }
     newname[wclen - 1] = L'\0';
     /*如果符号不符合规范则错误提示*/
-    if(regular_name(newname)==0){
-      wprintf(L"%ls%ls\n", language_pack.Illegal_characters,
-              L"@#+_-=,.:");
+    if (regular_name(newname) == 0) {
+      wprintf(L"%ls%ls\n", language_pack.Illegal_characters, L"@#+_-=,.:");
       return -3;
     }
     /*如果发现了旧的笔记名字冲突*/
-    if(treesearch(root,newname)!=NULL){
-      wprintf(L"%ls\n",language_pack.Naming_conflict_existing_note_already_exists);
+    if (treesearch(root, newname) != NULL) {
+      wprintf(L"%ls\n",
+              language_pack.Naming_conflict_existing_note_already_exists);
       return -2;
     }
     wcscpy(curr->tip->name, newname);
     if (mod == 1) {
       int ch = treechange(curr, newname);
       if (ch == -1) {
-        wprintf(L"%ls:%ls\n", language_pack.Empty_text_error,newname);
+        wprintf(L"%ls:%ls\n", language_pack.Empty_text_error, newname);
       }
     }
     return 1;
@@ -300,4 +300,67 @@ static wchar_t *new_wchar_text(wchar_t *__oldstr, int __language,
   }
   /*wprintf(L"准备写入:\n%ls",new_text);*/
   return new_text;
+}
+
+/*-load命令，剪贴树，把loadtree树中内容导入到root里面，如果遇到条目名称一样时候，
+若mod==1时，则复制loadtree内容，
+如果mod==0则遇见重复时候询问，
+如果mod==-1的话就保留*/
+int treeload(struct tree *root, struct tree *loadtree, int mod) {
+  while(loadtree!=NULL&&loadtree->tip!=NULL){
+  if (loadtree->tip->name[0] != L'\0' &&
+      loadtree->tip->mincontent[0] != L'\0') {
+    struct tree *curr = treesearch(root, loadtree->tip->name);
+    /*原来的树找不到新内容就插入*/
+    if (curr == NULL) {
+      insert_node(root,loadtree->tip);
+    } else if (mod == 1) /*复制新内容*/ {
+      if(wcscmp(curr->tip->mincontent,loadtree->tip->mincontent)==0){
+        loadtree=loadtree->next;
+        continue;
+      }
+      new : curr->tip = loadtree->tip;
+    } else if (mod == -1) {
+      ;
+    } else if (mod == 0) {
+      int a = workdirname.language;
+      #ifdef __WIN32
+      system("cls");
+      #elif __linux__
+      system("clear");
+      #endif
+      wprintf(L"%ls<y,n>\n",language_pack.are_you_sure_replace);
+      if(wcscmp(curr->tip->mincontent,loadtree->tip->mincontent)==0){
+        loadtree=loadtree->next;
+        continue;
+      }
+      if (a != curr->tip->language) {
+        set_language(curr->tip->language);
+        wprintf(L"old:\n%ls:%ls\n", curr->tip->name, (curr->tip->mincontent));
+        fflush(stdout);
+        set_language(a);
+      } else {
+        wprintf(L"old:\n%ls:%ls\n", curr->tip->name, (curr->tip->mincontent));
+        fflush(stdout);
+      }
+      if (a != loadtree->tip->language) {
+        set_language(loadtree->tip->language);
+        wprintf(L"new:\n%ls:%ls\n", loadtree->tip->name,
+                (loadtree->tip->mincontent));
+        fflush(stdout);
+        set_language(a);
+      } else {
+        wprintf(L"new:\n%ls:%ls\n", loadtree->tip->name,
+                (loadtree->tip->mincontent));
+        fflush(stdout);
+      }
+      wprintf(L"%ls<y,n>\n",language_pack.are_you_sure_replace);
+      int ch = getch();
+      if (ch =='y'||ch=='Y') {
+        goto new;
+      }
+    }
+  }
+  loadtree=loadtree->next;
+  }
 }

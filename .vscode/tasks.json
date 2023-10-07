@@ -10,7 +10,7 @@
 				"-g",
 				"*.c",
 				"-o",
-				"${workspaceFolder}/software/debug/mytips"
+				"${workspaceFolder}/software/debug/tips"
 			],
 			"options": {
 				"cwd": "${fileDirname}"
@@ -33,7 +33,7 @@
 				"-O3",
 				"*.c",
 				"-o",
-				"${workspaceFolder}/software/debug/mytips"
+				"${workspaceFolder}/software/debug/tips"
 			],
 			"options": {
 				"cwd": "${fileDirname}"
@@ -53,7 +53,7 @@
 				"-g",
 				"*.c",
 				"-o",
-				"${workspaceFolder}/software/debug/mytips.exe"
+				"${workspaceFolder}/software/debug/tips.exe"
 			],
 			"options": {
 				"cwd": "${fileDirname}"

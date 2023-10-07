@@ -1,5 +1,5 @@
 #include <wchar.h>
-#define VERSION 0.002
+#define VERSION 1.000
 enum _system { WINDOWS = 10, LINUX, ERROR = 255 };
 /*代表着工作保存路径*/
 typedef struct Workdirname2023 {
@@ -88,7 +88,7 @@ struct LANGUNAGE_SUPPORT {
   wchar_t Illegal_characters[200];  // 非法字符，你只能使用合法字符，例如
   wchar_t Version[10];              // 版本
   wchar_t Invalid_command_line[200];  // 无效命令行
-  wchar_t Help[2000];                 // 帮助文件
+  wchar_t Help[4000];                 // 帮助文件
   wchar_t counld_not_find_command[200];//无当前命令参数，请使用"mytips -help"命令查看帮助文件
   wchar_t do_you_want_remove_note[80];//删除这个笔记吗?
   wchar_t Version_update_operation_in_progress[80];//正在进行版本更新操作
@@ -104,8 +104,13 @@ struct LANGUNAGE_SUPPORT {
   wchar_t Please_enter_a_new_text_editor_name[80];
   wchar_t Text_editor_name_modified_successfully[80];
   wchar_t Text_editor_name_modification_failed[80];
-  wchar_t please_enter_a_new_note_name[80];//请输入新的笔记名称
-  wchar_t Naming_conflict_existing_note_already_exists[80];//命名冲突，现有笔记已经存在
+  wchar_t please_enter_a_new_note_name[100];//请输入新的笔记名称
+  wchar_t Naming_conflict_existing_note_already_exists[100];//命名冲突，现有笔记已经存在
+  wchar_t save[80];//存档
+  wchar_t Please_select_an_archive_to_load[100];//请选择存档进行加载
+  wchar_t The_folder_is_empty_or_does_not_exist[100];//文件夹为空或者文件夹不存在
+  wchar_t Archive_replacement_completed[200];//进行存档替换完成
+  wchar_t are_you_sure_replace[150];//你确定要替换吗？
   //修改条目
 }; /*结构体请由末尾加入新文本，进行顺序的设置*/
 extern struct LANGUNAGE_SUPPORT language_pack;

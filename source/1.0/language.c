@@ -135,11 +135,17 @@ static void language_group_set(int select) {
           L"Empty text error",
           L"Add note entry",
           L"Entry already exists",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Please enter a new text editor name",
+          L"Text editor name successfully modified",
+          L"Failed to modify text editor name",
+          L"Please enter a new note name",
+          L"Naming conflict, existing note already exists",
+          L"Save",
+          L"Please select an archive to load",
+          L"The folder is empty or does not exist",
+          L"Archive replacement completed",
+          L"Found a conflict between new and old notes, are you sure you want "
+          L"to replace? Enter 'y' to replace"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -164,11 +170,17 @@ static void language_group_set(int select) {
           L"Empty text error",
           L"Add note entry",
           L"Entry already exists",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Please enter a new text editor name",
+          L"Text editor name successfully modified",
+          L"Failed to modify text editor name",
+          L"Please enter a new note name",
+          L"Naming conflict, existing note already exists",
+          L"Save",
+          L"Please select an archive to load",
+          L"The folder is empty or does not exist",
+          L"Archive replacement completed",
+          L"Found a conflict between new and old notes, are you sure you want "
+          L"to replace? Enter 'y' to replace"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -195,7 +207,12 @@ static void language_group_set(int select) {
           L"文本编辑器名修改成功",
           L"文本编辑器名修改失败",
           L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"命名冲突，现有笔记已经存在",
+          L"保存",
+          L"请选择存档进行加载",
+          L"文件夹为空或者文件夹不存在",
+          L"进行存档案替换完成",
+          L"发现新旧笔记冲突，你确定要替换吗？输入y来替换"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -217,12 +234,16 @@ static void language_group_set(int select) {
           L"完成",
           L"空文本錯誤",
           L"新增筆記項目",
-          L"項目已存在",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"請輸入新的文本編輯器名稱",
+          L"文本編輯器名稱修改成功",
+          L"文本編輯器名稱修改失敗",
+          L"請輸入新的筆記名稱",
+          L"命名衝突，現有筆記已存在",
+          L"保存",
+          L"請選擇要載入的存檔",
+          L"資料夾為空或不存在",
+          L"存檔替換完成",
+          L"發現新舊筆記衝突，確定要替換嗎？輸入 'y' 進行替換"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -248,11 +269,17 @@ static void language_group_set(int select) {
           L"Erreur de texte vide",
           L"Ajouter une entrée de note",
           L"entrée existe déjà" /*setlang*/,
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Veuillez entrer un nouveau nom d'éditeur de texte",
+          L"Nom de l'éditeur de texte modifié avec succès",
+          L"Échec de la modification du nom de l'éditeur de texte",
+          L"Veuillez entrer un nouveau nom de note",
+          L"Conflit de nom, une note existante porte déjà ce nom",
+          L"Enregistrer",
+          L"Veuillez sélectionner une archive à charger",
+          L"Le dossier est vide ou n'existe pas",
+          L"Remplacement de l'archive terminé",
+          L"Un conflit entre les nouvelles et anciennes notes a été détecté. "
+          L"Êtes-vous sûr de vouloir remplacer ? Entrez 'y' pour remplacer"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -278,11 +305,17 @@ static void language_group_set(int select) {
           L"Error de texto vacío",
           L"Añadir entrada de nota",
           L"a entrada ya existe",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Veuillez entrer un nouveau nom d'éditeur de texte",
+          L"Nom de l'éditeur de texte modifié avec succès",
+          L"Échec de la modification du nom de l'éditeur de texte",
+          L"Veuillez entrer un nouveau nom de note",
+          L"Conflit de nom, une note existante porte déjà ce nom",
+          L"Enregistrer",
+          L"Veuillez sélectionner une archive à charger",
+          L"Le dossier est vide ou n'existe pas",
+          L"Remplacement de l'archive terminé",
+          L"Un conflit entre les nouvelles et anciennes notes a été détecté. "
+          L"Êtes-vous sûr de vouloir remplacer ? Entrez 'y' pour remplacer"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -306,11 +339,18 @@ static void language_group_set(int select) {
           L"خطأ في النص الفارغ",
           L"إضافة مدخل الملاحظة",
           L"العنصر موجود بالفعل",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"الرجاء إدخال اسم جديد لمحرر النص",
+          L"تم تعديل اسم محرر النص بنجاح",
+          L"فشل في تعديل اسم محرر النص",
+          L"الرجاء إدخال اسم جديد للملاحظة",
+          L"تعارض في التسمية، الملاحظة موجودة بالفعل",
+          L"حفظ",
+          L"الرجاء تحديد أرشيف للتحميل",
+          L"المجلد فارغ أو غير موجود",
+          L"اكتمال استبدال الأرشيف",
+          L"تم اكتشاف تعارض بين الملاحظات الجديدة والقديمة، هل أنت متأكد من "
+          L"رغبتك في الاستبدال؟ أدخل 'y' للاستبدال"
+
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -335,11 +375,18 @@ static void language_group_set(int select) {
           L"Leerer Textfehler",
           L"Notizeintrag hinzufügen",
           L"Eintrag existiert bereits",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Bitte geben Sie einen neuen Namen für den Texteditor ein",
+          L"Texteditor-Name erfolgreich geändert",
+          L"Fehler beim Ändern des Texteditor-Namens",
+          L"Bitte geben Sie einen neuen Notiznamen ein",
+          L"Namenskonflikt, eine vorhandene Notiz existiert bereits",
+          L"Speichern",
+          L"Bitte wählen Sie ein Archiv zum Laden aus",
+          L"Der Ordner ist leer oder existiert nicht",
+          L"Archiversetzung abgeschlossen",
+          L"Konflikt zwischen neuen und alten Notizen gefunden. Sind Sie "
+          L"sicher, dass Sie ersetzen möchten? Geben Sie 'y' ein, um zu "
+          L"ersetzen"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -365,11 +412,17 @@ static void language_group_set(int select) {
           L"Ошибка пустого текста",
           L"Добавить запись заметки",
           L"Запись уже существует",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Пожалуйста, введите новое имя текстового редактора",
+          L"Имя текстового редактора успешно изменено",
+          L"Ошибка при изменении имени текстового редактора",
+          L"Пожалуйста, введите новое имя заметки",
+          L"Конфликт имен, заметка с таким именем уже существует",
+          L"Сохранить",
+          L"Пожалуйста, выберите архив для загрузки",
+          L"Папка пуста или не существует",
+          L"Замена архива завершена",
+          L"Обнаружено конфликт между новыми и старыми заметками. Вы уверены, "
+          L"что хотите заменить? Введите 'y' для замены"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -394,11 +447,17 @@ static void language_group_set(int select) {
           L"Erro de texto vazio",
           L" Adicionar entrada da nota",
           L"A entrada já existe",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Por favor, digite um novo nome para o editor de texto",
+          L"Nome do editor de texto alterado com sucesso",
+          L"Falha ao alterar o nome do editor de texto",
+          L"Por favor, digite um novo nome para a nota",
+          L"Conflito de nomes, uma nota com esse nome já existe",
+          L"Salvar",
+          L"Por favor, selecione um arquivo para carregar",
+          L"A pasta está vazia ou não existe",
+          L"Substituição do arquivo concluída",
+          L"Detectado um conflito entre as notas novas e antigas. Tem certeza "
+          L"de que deseja substituir? Digite 'y' para substituir"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -408,7 +467,7 @@ static void language_group_set(int select) {
           L"Ugyldige tegn, du kan kun bruge gyldige tegn, for eksempel:",
           L"Version",
           L"Ugyldig kommandolinje, du kan køre den på følgende måde:",
-          Danish_DK_help,
+          danish_DK_help,
           L"Der er ingen aktuelle kommandoparametre. Brug venligst kommandoen "
           L"\"mytips -help\" for at se hjælpefilen.",
           L"Slette denne note?",
@@ -422,11 +481,17 @@ static void language_group_set(int select) {
           L"Tom tekstfejl",
           L"Tilføj noteindgang",
           L"Indgangen findes allerede",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"Indtast venligst et nyt navn til teksteditoren",
+          L"Navnet på teksteditoren blev ændret succesfuldt",
+          L"Fejl ved ændring af navnet på teksteditoren",
+          L"Indtast venligst et nyt navn til noten",
+          L"Navnekonflikt, der findes allerede en note med det navn",
+          L"Gem",
+          L"Vælg venligst et arkiv til indlæsning",
+          L"Mappen er tom eller eksisterer ikke",
+          L"Udskiftning af arkiv fuldført",
+          L"Lav en konflikt mellem nye og gamle noter. Er du sikker på, at du "
+          L"vil erstatte? Indtast 'y' for at erstatte"
           /*setlang*/};
       language_pack = setlanguage;
       break;
@@ -450,11 +515,17 @@ static void language_group_set(int select) {
           L"空のテキストエラー",
           L"ノートのエントリを追加します",
           L"エントリはすでに存在しています",
-          L"请输入新的文本编辑器名称",
-          L"文本编辑器名修改成功",
-          L"文本编辑器名修改失败",
-          L"请输入新的笔记名称：",
-          L"命名冲突，现有笔记已经存在"
+          L"新しいテキストエディタの名前を入力してください",
+          L"テキストエディタの名前が正常に変更されました",
+          L"テキストエディタの名前の変更に失敗しました",
+          L"新しいノートの名前を入力してください",
+          L"名前の衝突、既存のノートがすでに存在しています",
+          L"保存",
+          L"読み込むアーカイブを選択してください",
+          L"フォルダは空ですか、存在しません",
+          L"アーカイブの置き換えが完了しました",
+          L"新旧ノートの衝突が検出されました。置き換えますか？置き換える場合は "
+          L"'y' を入力してください"
           /*setlang*/};
       language_pack = setlanguage;
       break;
