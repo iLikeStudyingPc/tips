@@ -1,53 +1,118 @@
-# tips
-终端笔记软件，linux平台，winodws平台
+This document introduces the components of the project
 
-环境搭建：
+Environmental construction:
 
-vscode软件，用c语言，暂无使用第三方库。
+VScode software, using C language, currently does not use third-party libraries.
 
-你需要修改.vscode里面的配置文件的gcc,gdb,g++软件目录，然后运行生成任务时候，需要选择正确的任务
+You need to modify the gcc, gdb, and g++software directories of the configuration files in. vscode, and then select the correct task when running the generate task
 
-文件夹组成部分：
+Folder components:
 
-source：用于保存各个版本源代码;--{
+Source: used to save the source code of each version-- {
 
-function.h:保存源代码所需大部分的头文件，定义结构体等部分。
+Function. h: Save most of the header files required for the source code, define structures, and other parts.
 
-save.c:用于程序保存存档，设置等功能。
+Save. c: Used for program saving, archiving, setting, and other functions.
 
-language.c:用于程序选择语言，提供不同的语言支持
+Language. c: Used for program language selection, providing different language support
 
-language.h:用于提供程序的帮助文件
+Language. h: Help file for providing programs
 
-rule.c:程序检测用户输入符号元素或者操作等方面是否符合规范。
+Rule. c: The program detects whether user input symbol elements or operations comply with the specifications.
 
-structure.c:数据结构，保存和封装数据操作的函数。
+Structure. c: Data structure, functions for saving and encapsulating data operations.
 
-structure.h:数据结构的头文件
+Structure. h: header file for data structure
 
-main.c:软件入口，设置信号处理等部分。
+Main. c: Software entry, setting signal processing and other parts.
 
-system.c:一些程序所用跨平台函数
+System. c: Cross platform functions used by some programs
 
-} software:用于保存各个版本的软件输出，其中debug文件夹里用于测试调试版本。
+}
 
-特别说明: 使用windows时候，有一些编码问题。 暂时没有解决，此外软件需要移动到系统bin文件夹进行运行。这样最方便
 
-软件使用帮助: tips - 命令行笔记本应用
+Software: Used to save software output for each version, with the debug folder used for testing and debugging versions.
 
-用法: tips [命令] [参数]
+Special instructions:
 
-一级命令: -a, -add <笔记名> 添加新笔记 -c, -change <笔记名> 修改指定的笔记内容 -s, -search <关键词> 搜索笔记 -rm 删除指定笔记 -rf 无需同意即删除指定笔记 -v, -version 显示程序版本信息 -h, -help 显示此帮助信息 -l,-load 从存档文件导入笔记 -save 备份全部笔记到文件 -settxt 修改软件编辑器（linux默认为nano） -language <语言> 设置界面语言 -init 软件重新初始化
+When using Windows, there are some encoding issues. There is currently no solution, and the software needs to be moved to the system bin folder for operation. This is the most convenient way
 
-一级命令命令优先级别：version>help>settxt>rf>rm>search>change>add>load>save>language>init
+Software Usage Help: 
+ tips - command line notebook application
 
--c的二级命令 -all 修改笔记全部内容 -name 只修改笔记条目的名称 -content （默认只修改笔记内容) -c的二级命令优先级别：all>rename>content
+Usage:
+ tips [command] [parameter]
 
--l的二级命令: -n -new 导入笔记不经过确定，冲突时候，保存新笔记 -o -old 导入笔记不经过确定，冲突时候，保存旧笔记 -b -backup 导入笔记并且删除之前的笔记 -content 导入笔记(默认，冲突时候依次确定)
+First level commands:
 
--l的二级命令优先级别 old>new>backup>content
+-a, -add <note name> add a new 
 
-笔记名 指定要操作的笔记的名字
-关键词 搜索该关键词在笔记内容中的匹配 语言 设置界面语言,支持:english_US,english_GB,chinese_CN,chinese_TW,french_FR,spanish_ES,arabic_AE,german_DE,russians_RU,Danish_DK,....
+-c, -change <note name> modify the specified note content
 
-示例: tips -a tar 添加名为"tar"的笔记
+-s, -search <keyword> search notes
+
+-rm delete specified note 
+
+-rf delete specified note without confirmation
+
+-v, -version display program version info
+
+-h, -help display this help info
+
+-l,-load import notes from archive file
+
+-save backup all notes to file
+
+-settxt modify software editor (nano by default on linux)
+
+-language <language> set interface language
+
+-init reinitialize the software
+
+First level command priority: version>help>settxt>rf>rm>search>change>add>load>save>language>init
+
+
+-c secondary commands:
+
+-all modify entire note content
+
+-name only modify note entry name
+
+-content (default only modify note content)
+
+-c secondary command priority: all>rename>content
+
+
+
+-l secondary commands:
+-n -new import notes without confirmation, keep new notes if conflict
+
+-o -old import notes without confirmation, keep old notes if conflict
+
+-b -backup import notes and delete existing ones
+
+-content import notes (default, confirm each if conflict)
+
+-l secondary command priority: old>new>backup>content
+
+Note name specify note to operate on
+
+Keyword search keyword match in note content
+
+Language set interface language, supports: english_US, english_GB, chinese_CN, chinese_TW, french_FR, spanish_ES, arabic_AE, german_DE, russian_RU, danish_DK,....
+
+Examples:
+
+ tips -a tar add a note named "tar"
+
+ tips -save save notes
+
+ tips -change -new import notes discarding old versions
+
+Please execute after downloading the software ontology:
+    for linux:
+    ```shell
+      sudo mv /path/to/tips /bin/
+      sudo chmod 777 /bin/tips
+      tips
+    ```

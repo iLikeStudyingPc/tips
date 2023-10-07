@@ -9,7 +9,6 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #endif
-#define __DEBIAN 1
 /*返回存档树的位置*/
 static void return_fileplace(void) {
 #ifdef __WIN32
@@ -136,8 +135,6 @@ int make_the_dir(char *string) {
       // 文件夹不存在，创建文件夹
       if (!mkdir(string, 0777) == 0) {
         wprintf(L"Create dir: %s\n", string);
-// debian
-#if __DEBIAN
         char command[strlen(string) + 50];
         strcat(strcpy(command, "sudo mkdir -p "), string);
         system(command);
@@ -146,7 +143,6 @@ int make_the_dir(char *string) {
         if (stat(string, &st) != -1) {
           return 1;
         }
-#endif
         printf("Unable to create folder\n");
         return 0;
       }
