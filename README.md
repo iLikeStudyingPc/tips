@@ -118,4 +118,3 @@ for linux:
       sudo chmod 777 /bin/tips
 
       tips
-```
