@@ -112,13 +112,10 @@ Examples:
 Please execute after downloading the software ontology(Pay attention to replacing the path of tips in the command with the path in your computer):
 
     for linux:
-
-    ```shell
-
+```
       sudo mv /path/to/tips /bin/
 
       sudo chmod 777 /bin/tips
 
       tips
-      
-    ```
+```
