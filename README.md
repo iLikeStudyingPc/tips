@@ -113,7 +113,6 @@ Please execute after downloading the software ontology(Pay attention to replacin
 
 for linux:
 
-```
       sudo mv /path/to/tips /bin/
 
       sudo chmod 777 /bin/tips
