@@ -1,15 +1,6 @@
 #include "stdlib.h"
 #include "stdio.h"
-enum _system{WINDOWS=10,LINUX,ERROR=255};
-#ifdef _WIN32
-/*windows数据支持*/
-#include "shlobj.h"
-#include "windows.h"
-#include "conio.h"
-enum _system thesystem=WINDOWS;
-#elif __linux__
 /*linux数据支持*/
-enum _system thesystem=LINUX;
 #include <sys/stat.h>
 #include <sys/types.h>
 /*linux对于windows getch的模拟*/
@@ -33,7 +24,3 @@ char getch(void){
     system("stty echo");
     return b;
 }
-#elif
-/*错误系统支持*/
-enum _system thesystem=ERROR;
-#endif

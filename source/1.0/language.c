@@ -21,7 +21,7 @@ static char c_language[Count_language][(18)] = {
 void set_language(int select) {
   workdirname.language = select;
   switch (select) {
-#ifdef _WIN32
+#if 0
     case english_US:
       setlocale(LC_ALL, "en_US.utf8");
       language_group_set(select);
@@ -80,18 +80,9 @@ void set_language(int select) {
 /*终端交互形式的设置语言*/
 void Language_setting_interaction(void) {
   for (int ch = 0, t = 0;;) {
-    if (thesystem == WINDOWS) {
-      system("cls");
-    } else if (thesystem == LINUX) {
-      system("clear");
-    }
+    system("clear");
     for (int i = 0; i < Count_language; i++) {
-#ifdef _WIN32
-      wprintf(L"%d:", i);
-      printf("%s", c_language[i]);
-#elif __linux__
       wprintf(L"%d: %s", i, c_language[i]);
-#endif
       if (i == t) {
         wprintf(L"  <--choise");
       }

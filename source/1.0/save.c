@@ -1,32 +1,12 @@
 #include <stdio.h>
-#include "save.h"
 #include <stdlib.h>
 #include <string.h>
-#include "function.h"
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <dirent.h>
 #include <sys/stat.h>
-#endif
+#include <dirent.h>
+#include "function.h"
+#include "save.h"
 /*返回存档树的位置*/
 static void return_fileplace(void) {
-#ifdef __WIN32
-  TCHAR docPath[MAX_PATH];
-  if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, docPath))) {
-    // 处理获取到的文档目录路径
-    strcpy(workdirname.name[0], docPath);
-    char *str = NULL;
-    while ((str = strchr(workdirname.name[0], '\\')) != NULL) *str = '/';
-  } else {
-    wprintf(
-        L"Initialization error: Unable to find file system user document "
-        L"path\n");
-    exit(EXIT_FAILURE);
-  }
-  strcat(workdirname.name[0], "/mytips/");
-  if (!make_the_dir(workdirname.name[0])) exit(EXIT_FAILURE);
-#elif __linux__
   char *xdg_docs = getenv("XDG_DOCUMENTS_DIR");
   if (xdg_docs) {
     strcpy(workdirname.name[0], xdg_docs);
@@ -37,7 +17,6 @@ static void return_fileplace(void) {
   // 拼接具体文件名
   strcat(workdirname.name[0], "/mytips/");
   if (!make_the_dir(workdirname.name[0])) exit(EXIT_FAILURE);
-#endif
 }
 /*软件开启准备活动,告诉软件存档位置，但是并不会读取这些存档,首次初始化返回NULL,当mod==1时候重新初始化*/
 extern char *Initialize(int mod) {
@@ -46,7 +25,7 @@ extern char *Initialize(int mod) {
   *(workspace + 0) = '\0';
   strcat(strcpy(workspace, workdirname.name[0]), "setting.data");
   FILE *thespace = fopen(workspace, "r");
-  if (thespace == NULL||mod==1) {
+  if (thespace == NULL || mod == 1) {
     workdirname.language = english_US; /*默认语言设置为英文*/
     {
       /*
@@ -82,11 +61,7 @@ extern char *Initialize(int mod) {
   free(workspace);
   fclose(thespace);
   if (workdirname.name[3][0] == '\0') {
-#ifdef __WIN32
-    strcpy(workdirname.name[3], "notepad");
-#elif __linux__
     strcpy(workdirname.name[3], "nano");
-#endif
   }
   /*如果默认的编辑器不存在则申请修改编辑器*/
   if (!detection_program_exist(workdirname.name[3])) {
@@ -118,17 +93,6 @@ FILE *write_file(char *filename) {
 
 /*创建文件夹，当文件夹不存在时候就创建文件夹，错误创建返回0*/
 int make_the_dir(char *string) {
-#ifdef __WIN32
-  DWORD fileAttributes = GetFileAttributesA(string);
-  if (fileAttributes == INVALID_FILE_ATTRIBUTES) {
-    // 文件夹不存在，创建文件夹
-    if (!CreateDirectoryA(string, NULL)) {
-      printf("Unable to create folder\n");
-      return 0;
-    }
-  }
-#endif
-#ifdef __linux__
   {
     struct stat st;
     if (stat(string, &st) == -1) {
@@ -148,7 +112,6 @@ int make_the_dir(char *string) {
       }
     }
   }
-#endif
   return 1;
 }
 void save_optons(void) {
@@ -189,20 +152,14 @@ if (result) {
 }
 */
 int is_directory(const char *path) {
-#ifdef _WIN32
-    DWORD attributes = GetFileAttributesA(path);
-    return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
-#else
-    struct stat file_stat;
-    if (stat(path, &file_stat) == 0) {
-        return S_ISDIR(file_stat.st_mode);
-    }
-    return 0;
-#endif
+  struct stat file_stat;
+  if (stat(path, &file_stat) == 0) {
+    return S_ISDIR(file_stat.st_mode);
+  }
+  return 0;
 }
 
-
-/*filedir是一个文件夹，在Windows和linux中运行，首先检测文件夹有效性，然后进入到目录内，返回一系列该目录中的文件名，但不返回文件夹名，
+/*filedir是一个文件夹，在linux中运行，首先检测文件夹有效性，然后进入到目录内，返回一系列该目录中的文件名，但不返回文件夹名，
   get_files这个函数返回给定目录中的文件名数组。返回的数组以NULL结尾。
   使用方法：
   char **files = get_files("/path/to/directory");
@@ -217,74 +174,75 @@ int is_directory(const char *path) {
   free(files);
 */
 char **get_files(const char *directory) {
-    DIR *dir;
-    struct dirent *entry;
+  DIR *dir;
+  struct dirent *entry;
 
-    dir = opendir(directory);
-    if (dir == NULL) {
-        return NULL;
+  dir = opendir(directory);
+  if (dir == NULL) {
+    return NULL;
+  }
+
+  char **files = malloc(100 * sizeof(char *));
+  int count = 0;
+
+  while ((entry = readdir(dir)) != NULL) {
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+      continue;
     }
 
-    char **files = malloc(100 * sizeof(char *));
-    int count = 0;
+    char file_path[1024];
+    snprintf(file_path, sizeof(file_path), "%s/%s", directory, entry->d_name);
 
-    while ((entry = readdir(dir)) != NULL) {
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-            continue;
-        }
-
-        char file_path[1024];
-        snprintf(file_path, sizeof(file_path), "%s/%s", directory, entry->d_name);
-
-        if (!is_directory(file_path)) {
-            files[count] = malloc(strlen(entry->d_name) + 1);
-            strcpy(files[count], entry->d_name);
-            count++;
-        }
+    if (!is_directory(file_path)) {
+      files[count] = malloc(strlen(entry->d_name) + 1);
+      strcpy(files[count], entry->d_name);
+      count++;
     }
-    closedir(dir);
-    files[count] = NULL;
-    return files;
+  }
+  closedir(dir);
+  files[count] = NULL;
+  return files;
 }
 
 /*在文件夹里选择文件,无文件则返回0*/
 char *_chosefile(char *str) {
   char **files = get_files(workdirname.name[4]);
-  int length=0,chose=0,ch=0;
+  int length = 0, chose = 0, ch = 0;
   /*取得文件列表长度*/
-  for (length = 0; files[length] != NULL; length++);
-  if(length==0){
+  for (length = 0; files[length] != NULL; length++)
+    ;
+  if (length == 0) {
     return NULL;
   }
-  do{
+  do {
     /*控制选择列表箭头*/
-    switch(ch){
-      case 72:chose-=1;break;
-      case 80:chose+=1;break;
+    switch (ch) {
+      case 72:
+        chose -= 1;
+        break;
+      case 80:
+        chose += 1;
+        break;
     }
-    if(chose<0){
-      chose=length-1;
-    }else if(chose>=length){
-      chose=0;
+    if (chose < 0) {
+      chose = length - 1;
+    } else if (chose >= length) {
+      chose = 0;
     }
-    #ifdef __WIN32
-    system("cls");
-    #elif __linux__
     system("clear");
-    #endif
     /*注意限制范围!!!*/
-    wprintf(L"%ls\n",language_pack.Please_select_an_archive_to_load);
-    for(int i=chose-2;i<chose+3;i++){
-      if(i<0){
+    wprintf(L"%ls\n", language_pack.Please_select_an_archive_to_load);
+    for (int i = chose - 2; i < chose + 3; i++) {
+      if (i < 0) {
         wprintf(L"^^^^^^^^^^^^^^^^^^^^^^\n");
-      }else if(i>=length){
+      } else if (i >= length) {
         wprintf(L"vvvvvvvvvvvvvvvvvvvvvv\n");
-      }else{
-        wprintf(L"%s",files[i]);
-        if(i==chose) wprintf(L" <--choise");
+      } else {
+        wprintf(L"%s", files[i]);
+        if (i == chose) wprintf(L" <--choise");
         wprintf(L"\n");
       }
     }
-  }while((ch=getch())!='\r'&&ch!='\n');
+  } while ((ch = getch()) != '\r' && ch != '\n');
   return files[chose];
 }

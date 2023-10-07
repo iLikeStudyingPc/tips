@@ -35,9 +35,9 @@ Software: Used to save software output for each version, with the debug folder u
 
 Special instructions:
 
-When using Windows, there are some encoding issues. There is currently no solution, and the software needs to be moved to the system bin folder for operation. This is the most convenient way
+There is currently no solution, and the software needs to be moved to the system bin folder for operation. This is the most convenient way
 
-Software Usage Help: 
+Software Usage Help:
  tips - command line notebook application
 
 Usage:

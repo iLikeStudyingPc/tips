@@ -8,6 +8,7 @@
     "structure.h": "c",
     "stdio.h": "c",
     "unistd.h": "c",
-    "cwchar": "c"
+    "cwchar": "c",
+    "stat.h": "c"
   }
 }

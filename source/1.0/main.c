@@ -46,9 +46,6 @@ int main(int argc, char **argv) {
     wprintf(L"%ls\n", language_pack.Version_update_operation_in_progress);
     workdirname.version = VERSION;
   }
-  if (thesystem == WINDOWS) {
-    system("chcp 65001&&cls");
-  }
   if (argc == 1) {
     wprintf(L"%ls\n", language_pack.Help);
     exit(EXIT_SUCCESS);
@@ -76,12 +73,7 @@ int main(int argc, char **argv) {
       count_command += 1;
       /*wprintf(L"found \'-\'\n");调试*/
       if (whitch_command(*p, &thisopen) == 0) {
-        if (thesystem == WINDOWS) {
-          printf("%s", *p);
-          wprintf(L":%ls\n", language_pack.counld_not_find_command);
-        } else if (thesystem == LINUX) {
-          wprintf(L"%s:%ls\n", *p, language_pack.counld_not_find_command);
-        }
+        wprintf(L"%s:%ls\n", *p, language_pack.counld_not_find_command);
         exit(EXIT_FAILURE);
       }
     } else {
@@ -137,13 +129,8 @@ int main(int argc, char **argv) {
     }
   } else if (thisopen.rm == 1) { /*询问是否删除笔记*/
     for (struct command_str *p = &root; (p = p->next) != NULL;) {
-      if (thesystem == WINDOWS) {
-        wprintf(L"%ls", language_pack.do_you_want_remove_note);
-        printf("%s  <y,n>\n", p->str);
-      } else if (thesystem == LINUX) {
-        wprintf(L"%ls %s  <y,n>\n", language_pack.do_you_want_remove_note,
-                p->str);
-      }
+      wprintf(L"%ls %s  <y,n>\n", language_pack.do_you_want_remove_note,
+              p->str);
       fflush(stdout);
       int ch = 0;
       while ((ch = getch()) != '\r' && ch != 'y' && ch != 'n' && ch != 'Y' &&
@@ -152,12 +139,8 @@ int main(int argc, char **argv) {
       if (ch == 'Y' || ch == 'y') {
         char str[100] = "";
         sprintf(str, "%s -rf %s", *argv, p->str);
-        if (thesystem == LINUX) {
-          wprintf(L"execute:%s\n", str);
-        } else if (thesystem == WINDOWS) {
-          wprintf(L"execute:", str);
-          printf("%s\n", str);
-        }
+        wprintf(L"execute:%s\n", str);
+
         fflush(stdout);
         system(str);
       } else {
@@ -258,28 +241,28 @@ int main(int argc, char **argv) {
       wprintf(L"%ls\n", language_pack.Archive_failed);
     }
   } else if (thisopen.load == 1) { /*备份*/
-  char* thisfile=_chosefile(workdirname.name[4]);
-  if(thisfile==NULL){
-    wprintf(L"%ls\n",language_pack.The_folder_is_empty_or_does_not_exist);
-    return EXIT_SUCCESS;
-  }
-  wprintf(L"%ls:%s\n",language_pack.Found_Entry,thisfile);
-  /*所选择的文件的带上文件路径的文件名*/
-  char fileplace[strlen(workdirname.name[4])+strlen(thisfile)+1];
-  sprintf(fileplace,"%s%s",workdirname.name[4],thisfile);
+    char *thisfile = _chosefile(workdirname.name[4]);
+    if (thisfile == NULL) {
+      wprintf(L"%ls\n", language_pack.The_folder_is_empty_or_does_not_exist);
+      return EXIT_SUCCESS;
+    }
+    wprintf(L"%ls:%s\n", language_pack.Found_Entry, thisfile);
+    /*所选择的文件的带上文件路径的文件名*/
+    char fileplace[strlen(workdirname.name[4]) + strlen(thisfile) + 1];
+    sprintf(fileplace, "%s%s", workdirname.name[4], thisfile);
     if (thisopen.old == 1) {
       struct tree *newroot = rootstart(fileplace);
-      treeload(noderoot,newroot,-1);
+      treeload(noderoot, newroot, -1);
     } else if (thisopen.new == 1) {
       struct tree *newroot = rootstart(fileplace);
-      treeload(noderoot,newroot,1);
+      treeload(noderoot, newroot, 1);
     } else if (thisopen.backup == 1) {
       noderoot = rootstart(fileplace);
-    }else if(thisopen.content==1){
+    } else if (thisopen.content == 1) {
       struct tree *newroot = rootstart(fileplace);
-      treeload(noderoot,newroot,0);
+      treeload(noderoot, newroot, 0);
     }
-    wprintf(L"%ls\n",language_pack.Archive_replacement_completed);
+    wprintf(L"%ls\n", language_pack.Archive_replacement_completed);
     /*存档*/
     if (!write_root_end(noderoot, workdirname.name[1])) {
       wprintf(L"%ls\n", language_pack.Archive_failed);

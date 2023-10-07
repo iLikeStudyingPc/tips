@@ -1,6 +1,5 @@
 #include <wchar.h>
 #define VERSION 1.000
-enum _system { WINDOWS = 10, LINUX, ERROR = 255 };
 /*代表着工作保存路径*/
 typedef struct Workdirname2023 {
   /*
@@ -18,18 +17,11 @@ typedef struct Workdirname2023 {
   int default_control;
 } Workdirname2023927;
 extern Workdirname2023927 workdirname;
-extern enum _system thesystem;
 #define worknamemax (51)
 /*in system.c*/
-#ifdef _WIN32
-#include "conio.h"
-#include "shlobj.h"
-#include "windows.h"
-#elif __linux__
 #include <sys/stat.h>
 #include <sys/types.h>
 extern char getch(void);
-#endif
 
 /*in rule.c*/
 struct command_opention{

@@ -1,9 +1,8 @@
-#include "structure.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "structure.h"
 #include "save.h"
 #include "time.h"
 static void insert_node(struct tree *curr, struct tipcontent *newtip);
@@ -324,11 +323,7 @@ int treeload(struct tree *root, struct tree *loadtree, int mod) {
       ;
     } else if (mod == 0) {
       int a = workdirname.language;
-      #ifdef __WIN32
-      system("cls");
-      #elif __linux__
       system("clear");
-      #endif
       wprintf(L"%ls<y,n>\n",language_pack.are_you_sure_replace);
       if(wcscmp(curr->tip->mincontent,loadtree->tip->mincontent)==0){
         loadtree=loadtree->next;
