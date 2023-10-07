@@ -45,13 +45,13 @@ Usage:
 
 First level commands:
 
--a, -add <note name> add a new 
+-a, -add <note name> add new notes
 
 -c, -change <note name> modify the specified note content
 
 -s, -search <keyword> search notes
 
--rm delete specified note 
+-rm delete specified note
 
 -rf delete specified note without confirmation
 

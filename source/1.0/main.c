@@ -328,12 +328,6 @@ int main(int argc, char **argv) {
     noderoot = noderoot->next;
   }
   free(noderoot);
-  /*wprintf(L"\nadd:%d "
-  L"save:%d "
-  L"search:%d "
-  L"search:%d "
-  L"language:%d\n",thisopen.add,thisopen.save,thisopen.search,thisopen.man,thisopen.language);
-  */
 #endif
   return EXIT_SUCCESS;
 }
