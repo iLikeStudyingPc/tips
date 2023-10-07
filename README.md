@@ -111,7 +111,8 @@ Examples:
 
 Please execute after downloading the software ontology(Pay attention to replacing the path of tips in the command with the path in your computer):
 
-    for linux:
+for linux:
+
 ```
       sudo mv /path/to/tips /bin/
 
