@@ -173,7 +173,7 @@ int treenamechange(struct tree *root, wchar_t *str, int mod) {
   struct tree *curr = treesearch(root, str);
   if (curr != NULL) { /*如果搜到不为空则编辑笔记名称*/
     wchar_t newname[worknamemax];
-    wprintf(L"%ls:%ls", str, language_pack.please_enter_a_new_note_name);
+    wprintf(L"%ls--%ls:\n", str, language_pack.please_enter_a_new_note_name);
     fgetws(newname, worknamemax, stdin);
     int wclen = wcslen(newname);
     if (wclen <= 1) {
