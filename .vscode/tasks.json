@@ -28,7 +28,7 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-				"-O3",
+				"-O5",
 				"*.c",
 				"-o",
 				"${workspaceFolder}/software/debug/tips"

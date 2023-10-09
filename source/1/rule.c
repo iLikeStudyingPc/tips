@@ -10,9 +10,10 @@
 static void toLowerCase(char *str);
 
 /*
-**用于检测是否符合名字的规范（只包含字母，数字或者@#+_-=,.:字符）,若符合返回真1，不符合就返回假0
+**用于检测是否符合名字的规范（只包含字母，数字或者@#+_-=,.:字符）,若符合返回真1，不符合就返回假0,首项为-时候返回-1，要求不是命令行
 */
 int regular_name(wchar_t *str) {
+  if(*str==L'-') return -1;
   for (;; str += 1) {
     if (*str == L'\0') return 1;
     if ((iswalnum(*str)) && wcschr(L"@#+_-=,.:", *str) == NULL) {

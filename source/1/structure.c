@@ -180,8 +180,12 @@ int treenamechange(struct tree *root, wchar_t *str, int mod) {
     }
     newname[wclen - 1] = L'\0';
     /*如果符号不符合规范则错误提示*/
-    if (regular_name(newname) == 0) {
+    int ____ch=regular_name(newname);
+    if ( ____ch== 0) {
       wprintf(L"%ls%ls\n", language_pack.Illegal_characters, L"@#+_-=,.:");
+      return -3;
+    }else if(____ch==-1){
+      wprintf(L"%ls\n", language_pack.Your_note_name_cannot_start_with_the_symbol);
       return -3;
     }
     /*如果发现了旧的笔记名字冲突*/

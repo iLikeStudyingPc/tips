@@ -1,5 +1,5 @@
 #include <wchar.h>
-#define VERSION 1.000
+#define VERSION 1.001
 /*代表着工作保存路径*/
 typedef struct Workdirname2023 {
   /*
@@ -103,6 +103,7 @@ struct LANGUNAGE_SUPPORT {
   wchar_t The_folder_is_empty_or_does_not_exist[100];//文件夹为空或者文件夹不存在
   wchar_t Archive_replacement_completed[200];//进行存档替换完成
   wchar_t are_you_sure_replace[150];//你确定要替换吗？
+  wchar_t Your_note_name_cannot_start_with_the_symbol[120];//你的笔记命名不能以-符号开头
   //修改条目
 }; /*结构体请由末尾加入新文本，进行顺序的设置*/
 extern struct LANGUNAGE_SUPPORT language_pack;

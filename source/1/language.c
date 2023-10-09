@@ -136,7 +136,8 @@ static void language_group_set(int select) {
           L"The folder is empty or does not exist",
           L"Archive replacement completed",
           L"Found a conflict between new and old notes, are you sure you want "
-          L"to replace? Enter 'y' to replace"
+          L"to replace? Enter 'y' to replace",
+          L"Your note name cannot start with the - symbol"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -171,7 +172,8 @@ static void language_group_set(int select) {
           L"The folder is empty or does not exist",
           L"Archive replacement completed",
           L"Found a conflict between new and old notes, are you sure you want "
-          L"to replace? Enter 'y' to replace"
+          L"to replace? Enter 'y' to replace",
+          L"Your note name cannot start with the - symbol"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -203,7 +205,8 @@ static void language_group_set(int select) {
           L"请选择存档进行加载",
           L"文件夹为空或者文件夹不存在",
           L"进行存档案替换完成",
-          L"发现新旧笔记冲突，你确定要替换吗？输入y来替换"
+          L"发现新旧笔记冲突，你确定要替换吗？输入y来替换",
+          L"你的笔记命名不能以-符号开头"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -234,7 +237,8 @@ static void language_group_set(int select) {
           L"請選擇要載入的存檔",
           L"資料夾為空或不存在",
           L"存檔替換完成",
-          L"發現新舊筆記衝突，確定要替換嗎？輸入 'y' 進行替換"
+          L"發現新舊筆記衝突，確定要替換嗎？輸入 'y' 進行替換",
+          L"你的筆記命名不能以-符號開頭"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -270,7 +274,8 @@ static void language_group_set(int select) {
           L"Le dossier est vide ou n'existe pas",
           L"Remplacement de l'archive terminé",
           L"Un conflit entre les nouvelles et anciennes notes a été détecté. "
-          L"Êtes-vous sûr de vouloir remplacer ? Entrez 'y' pour remplacer"
+          L"Êtes-vous sûr de vouloir remplacer ? Entrez 'y' pour remplacer",
+          L"Le nom de vos notes ne peut pas commencer par - symbole"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -306,7 +311,8 @@ static void language_group_set(int select) {
           L"Le dossier est vide ou n'existe pas",
           L"Remplacement de l'archive terminé",
           L"Un conflit entre les nouvelles et anciennes notes a été détecté. "
-          L"Êtes-vous sûr de vouloir remplacer ? Entrez 'y' pour remplacer"
+          L"Êtes-vous sûr de vouloir remplacer ? Entrez 'y' pour remplacer",
+          L"El nombre de tu nota no puede comenzar con - símbolo"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -340,8 +346,8 @@ static void language_group_set(int select) {
           L"المجلد فارغ أو غير موجود",
           L"اكتمال استبدال الأرشيف",
           L"تم اكتشاف تعارض بين الملاحظات الجديدة والقديمة، هل أنت متأكد من "
-          L"رغبتك في الاستبدال؟ أدخل 'y' للاستبدال"
-
+          L"رغبتك في الاستبدال؟ أدخل 'y' للاستبدال",
+          L"' - 'الملاحظات الخاصة بك لا يمكن أن تبدأ مع"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -377,7 +383,8 @@ static void language_group_set(int select) {
           L"Archiversetzung abgeschlossen",
           L"Konflikt zwischen neuen und alten Notizen gefunden. Sind Sie "
           L"sicher, dass Sie ersetzen möchten? Geben Sie 'y' ein, um zu "
-          L"ersetzen"
+          L"ersetzen",
+          L"Ihr Notenname kann nicht mit dem '-'-Symbol beginnen"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -413,7 +420,8 @@ static void language_group_set(int select) {
           L"Папка пуста или не существует",
           L"Замена архива завершена",
           L"Обнаружено конфликт между новыми и старыми заметками. Вы уверены, "
-          L"что хотите заменить? Введите 'y' для замены"
+          L"что хотите заменить? Введите 'y' для замены",
+          L"Имя вашей заметки не может начинаться с символа '-'"
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -448,7 +456,8 @@ static void language_group_set(int select) {
           L"A pasta está vazia ou não existe",
           L"Substituição do arquivo concluída",
           L"Detectado um conflito entre as notas novas e antigas. Tem certeza "
-          L"de que deseja substituir? Digite 'y' para substituir"
+          L"de que deseja substituir? Digite 'y' para substituir",
+          L"O nome da nota não pode começar com o símbolo '-'."
           /*setlang*/};
       language_pack = setlanguage;
     } break;
@@ -482,7 +491,8 @@ static void language_group_set(int select) {
           L"Mappen er tom eller eksisterer ikke",
           L"Udskiftning af arkiv fuldført",
           L"Lav en konflikt mellem nye og gamle noter. Er du sikker på, at du "
-          L"vil erstatte? Indtast 'y' for at erstatte"
+          L"vil erstatte? Indtast 'y' for at erstatte",
+          L"Dit notenavn kan ikke starte med symbolet '-'"
           /*setlang*/};
       language_pack = setlanguage;
       break;
@@ -511,12 +521,13 @@ static void language_group_set(int select) {
           L"テキストエディタの名前の変更に失敗しました",
           L"新しいノートの名前を入力してください",
           L"名前の衝突、既存のノートがすでに存在しています",
-          L"保存",
+          L"保存に成功しました",
           L"読み込むアーカイブを選択してください",
           L"フォルダは空ですか、存在しません",
           L"アーカイブの置き換えが完了しました",
           L"新旧ノートの衝突が検出されました。置き換えますか？置き換える場合は "
-          L"'y' を入力してください"
+          L"'y' を入力してください",
+          L"あなたのノートの名前は'-'記号で始まることはできません"
           /*setlang*/};
       language_pack = setlanguage;
       break;
